@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Game } from "./views/GameView.jsx";
+import { Game } from "./presenters/GamePresenter";
 import { MainMenu } from "./presenters/MainMenuPresenter.jsx";
 import { RouterProvider, createHashRouter } from "react-router-dom";
 
