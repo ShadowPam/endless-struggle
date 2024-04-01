@@ -1,20 +1,21 @@
-import { PhaserGame } from "../game/PhaserGame";
-import { useRef } from "react";
-
-export function Game(props) {
+export function GameView(props) {
   function GoToMenu() {
     window.location.hash = "#/menu";
   }
-  const phaserRef = useRef();
+
+  function AttackACB(event) {
+    props.onAttack();
+  }
 
   return (
     <div id="app">
       <button className="pausebutton" onClick={GoToMenu}>
         Pause
       </button>
-      <PhaserGame ref={phaserRef} />
       <div id="buttons">
-        <button className="button">ATTACK</button>
+        <button className="button" onClick={AttackACB}>
+          ATTACK
+        </button>
         <button className="button">SHIELD</button>
         <button className="button">DODGE</button>
       </div>
