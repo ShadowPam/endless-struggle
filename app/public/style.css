@@ -84,19 +84,16 @@ body {
     position:absolute;
     top: 50%;
     left: 50%;
-    height: 500px;
-    width: 500px;
-    display: grid;
-    align-items: center;
-    justify-content: center;
+    height: 50%;
+    width: 40%;
     transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
 }
 
 .menubutton {
-    height: 80%;
-    width: 500px;
-    margin: 0;
-    padding: 0;
+    flex: 1.0;
+    margin: 20px;
 }
 
 .menulogo {
