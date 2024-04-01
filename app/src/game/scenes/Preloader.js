@@ -10,13 +10,15 @@ export class Preloader extends Scene
     init ()
     {
         //  We loaded this image in our Boot Scene, so we can display it here
-        this.add.image(512, 384, 'background');
+        // const bg = this.add.image(960, 330, 'background');
+        // bg.scale = 0.315
+        // bg.setAlpha(0.9)
 
         //  A simple progress bar. This is the outline of the bar.
-        this.add.rectangle(512, 384, 468, 32).setStrokeStyle(1, 0xffffff);
+        this.add.rectangle(960, 384, 468, 32).setStrokeStyle(1, 0xffffff);
 
         //  This is the progress bar itself. It will increase in size from the left based on the % of progress.
-        const bar = this.add.rectangle(512-230, 384, 4, 28, 0xffffff);
+        const bar = this.add.rectangle(960-230, 384, 4, 28, 0xffffff);
 
         //  Use the 'progress' event emitted by the LoaderPlugin to update the loading bar
         this.load.on('progress', (progress) => {
@@ -31,9 +33,30 @@ export class Preloader extends Scene
     {
         //  Load the assets for the game - Replace with your own assets
         this.load.setPath('assets');
-
+        this.load.spritesheet({
+        key: "mc",
+        url: "spritesheetMC.png",
+        frameConfig: {
+            frameWidth: 32,
+            frameHeight: 32,
+            startFrame: 0,
+            endFrame: 1,
+            }
+        });
+        this.load.setPath('assets');
+        this.load.spritesheet({
+        key: "enemy",
+        url: "spritesheetE.png",
+        frameConfig: {
+            frameWidth: 32,
+            frameHeight: 32,
+            startFrame: 0,
+            endFrame: 7,
+            }
+        });
         this.load.image('logo', 'logo.png');
         this.load.image('star', 'star.png');
+        this.load.image('background', 'bgtest.jpg');
     }
 
     create ()

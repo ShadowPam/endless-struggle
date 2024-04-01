@@ -27,7 +27,10 @@
     "dependencies": {
         "phaser": "^3.80.1",
         "react": "^18.2.0",
-        "react-dom": "^18.2.0"
+        "react-dom": "^18.2.0",
+        "react-router-dom": "^6.8.1",
+        "mobx": "^6.8.0",
+        "mobx-react-lite": "^3.4.2"
     },
     "devDependencies": {
         "@types/react": "^18.2.58",

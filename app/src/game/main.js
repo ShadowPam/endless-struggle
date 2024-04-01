@@ -1,7 +1,5 @@
 import { Boot } from './scenes/Boot';
-import { Game } from './scenes/Game';
-import { GameOver } from './scenes/GameOver';
-import { MainMenu } from './scenes/MainMenu';
+import { MainMenu } from './scenes/Game';
 import Phaser from 'phaser';
 import { Preloader } from './scenes/Preloader';
 
@@ -12,13 +10,11 @@ const config = {
     width: 1920,
     height: 768,
     parent: 'game-container',
-    backgroundColor: '#028af8',
+    backgroundColor: '#000000',
     scene: [
         Boot,
         Preloader,
         MainMenu,
-        Game,
-        GameOver
     ]
 };
 

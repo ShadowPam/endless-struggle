@@ -70,13 +70,18 @@ function App ()
         
     }
 
+    function GoToMenu() {
+        window.location.hash="#/menu"
+    }
+
     return (
         <div id="app">
+            <button className="pausebutton" onClick={GoToMenu}>Pause</button>
             <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
             <div id="buttons">
-                    <button className="button" onClick={changeScene}>Change Scene</button>
-                    <button disabled={canMoveSprite} className="button" onClick={moveSprite}>Toggle Movement</button>
-                    <button className="button" onClick={addSprite}>Add New Sprite</button>
+                    <button className="button" onClick={addSprite}>ATTACK</button>
+                    <button disabled={canMoveSprite} className="button" onClick={addSprite}>SHIELD</button>
+                    <button className="button" onClick={addSprite}>DODGE</button>
             </div>
         </div>
     )
