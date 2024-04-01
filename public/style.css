@@ -18,11 +18,11 @@ body {
 }
 
 #buttons {
-    display: flex;
-    flex-direction: row;
-    height: 100%;
+    display: inline-block;
+    height: 185px;
     width: 100%;
-    justify-content: center;
+    text-align: center;
+    vertical-align: center;
     background-color: #000000;
 }
 
@@ -33,7 +33,6 @@ body {
 }
 
 .game {
-    flex: 0.0;
     margin-bottom: -4px;
 }
 
@@ -43,30 +42,51 @@ body {
 }
 
 .button {
-    width: 341px;
-    height: 100px;
+    width: 20%;
+    height: 100%;
     margin: 0;
     padding: 0;
     background-color: #000000;
     color: rgba(255, 255, 255, 0.87);
-    border: 4px solid rgba(255, 255, 255, 0.87);
+    border: 50px solid rgb(0, 0, 0);
     cursor: pointer;
     transition: all 0.3s;
-
-    &:hover {
-        border: 4px solid #0ec3c9;
-        color: #0ec3c9;
-    }
-
-    &:active {
-        background-color: #0ec3c9;
-    }
 
     /* Disabled styles */
     &:disabled {
         cursor: not-allowed;
         border: 4px solid rgba(255, 255, 255, 0.3);
         color: rgba(255, 255, 255, 0.3);
+    }
+}
+
+.attackbutton {
+    &:hover {
+        border: 4px solid #ff000073;
+        color: #ff0000;
+    }
+    &:active {
+        background-color: #ff000073;
+    }
+}
+
+.shieldbutton {
+    &:hover {
+        border: 4px solid #00c3ff80;
+        color: #00c3ff;
+    }
+    &:active {
+        background-color: #00c3ff80;
+    }
+}
+
+.dodgebutton {
+    &:hover {
+        border: 4px solid #00ff407c;
+        color: #00ff40;
+    }
+    &:active {
+        background-color: #00ff407c;
     }
 }
 
