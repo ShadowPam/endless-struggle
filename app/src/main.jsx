@@ -27,6 +27,10 @@ function makeRouter() {
         {
             path: "/leaderboard",
             element: <MainMenu />,
+        },
+        {
+            path: "/login",
+            element: <MainMenu />,
         }
         
     ]))
