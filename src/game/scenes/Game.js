@@ -15,7 +15,8 @@ export class MainMenu extends Scene {
     bg.setAlpha(1);
 
     EventBus.on("hello", (data) => {
-      console.log("hllo");
+      mc.play("mcAnimationAttack");
+      mc.play("mcAnimationIdle");
     });
 
     this.add
@@ -52,14 +53,24 @@ export class MainMenu extends Scene {
       })
       .setOrigin(0.5);
 
-    const mcConfig = {
-      key: "mcAnimation",
+    const mcConfigIdle = {
+      key: "mcAnimationIdle",
       frames: this.anims.generateFrameNumbers("mc", { frames: [0, 1] }),
       frameRate: 5,
       repeat: -1,
     };
-    this.anims.create(mcConfig);
-    const mc = this.add.sprite(450, 600, "mc").play("mcAnimation");
+
+    const mcConfigAttack= {
+      key: "mcAnimationAttack",
+      frames: this.anims.generateFrameNumbers("mc", { frames: [64,65,66,67,68,69,70,71] }),
+      frameRate: 20,
+      repeat: 1,
+    };
+    this.anims.create(mcConfigIdle);
+    this.anims.create(mcConfigAttack);
+
+
+    const mc = this.add.sprite(450, 600, "mc").play("mcAnimationIdle");
     mc.scale = 5;
 
     this.add.rectangle(450, 700, 150, 20).setStrokeStyle(4, 0x000000);

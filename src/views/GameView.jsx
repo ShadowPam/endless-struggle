@@ -6,18 +6,14 @@ export function GameView(props) {
   function AttackACB(event) {
     props.onAttack();
   }
-
+// <button className="pausebutton" onClick={GoToMenu}>Pause</button>
   return (
-    <div id="app">
-      <button className="pausebutton" onClick={GoToMenu}>
-        Pause
-      </button>
+    <div>
+      <button className="pausebutton" onClick={GoToMenu}>Pause</button>
       <div id="buttons">
-        <button className="button" onClick={AttackACB}>
-          ATTACK
-        </button>
-        <button className="button">SHIELD</button>
-        <button className="button">DODGE</button>
+        <button className="button attackbutton" onClick={AttackACB}>ATTACK</button>
+        <button className="button shieldbutton">SHIELD</button>
+        <button className="button dodgebutton">DODGE</button>
       </div>
     </div>
   );

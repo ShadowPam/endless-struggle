@@ -40,7 +40,7 @@ export class Preloader extends Scene
             frameWidth: 32,
             frameHeight: 32,
             startFrame: 0,
-            endFrame: 1,
+            endFrame: 71,
             }
         });
         this.load.setPath('assets');
@@ -51,7 +51,7 @@ export class Preloader extends Scene
             frameWidth: 32,
             frameHeight: 32,
             startFrame: 0,
-            endFrame: 7,
+            endFrame: 71,
             }
         });
         this.load.image('logo', 'logo.png');
