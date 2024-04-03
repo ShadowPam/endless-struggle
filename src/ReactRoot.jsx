@@ -3,38 +3,45 @@ import ReactDOM from "react-dom/client";
 import { Game } from "./presenters/GamePresenter";
 import { MainMenu } from "./presenters/MainMenuPresenter.jsx";
 import { RouterProvider, createHashRouter } from "react-router-dom";
+import { observer } from "mobx-react-lite";
 
-function makeRouter() {
+function makeRouter(props) {
   return createHashRouter([
     {
       path: "/",
-      element: <MainMenu />,
+      element: <MainMenu model={props.model}/>,
     },
     {
       path: "/menu",
-      element: <MainMenu />,
+      element: <MainMenu model={props.model}/>,
     },
     {
       path: "/game",
-      element: <Game />,
+      element: <Game model={props.model}/>,
     },
     /*  {
       path: "/settings",
-      element: <Settings />,
+      element: <Settings model={props.model}/>,
     },
     {
       path: "/leaderboard",
-      element: <LeaderBoard />,
+      element: <LeaderBoard model={props.model}/>,
     },
     {
       path: "/login",
-      element: <Login />,
+      element: <Login model={props.model}/>,
     }, */
   ]);
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <RouterProvider router={makeRouter()} />
-  </React.StrictMode>
-);
+const ReactRoot = observer(
+  function ReactRoot(props){
+    return(
+      <React.StrictMode>
+      <RouterProvider router={makeRouter(props)} />
+      </React.StrictMode>
+    )
+  }
+)
+
+export { ReactRoot }
