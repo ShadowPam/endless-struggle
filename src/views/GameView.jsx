@@ -6,7 +6,7 @@ export function GameView(props) {
   function AttackACB(event) {
     props.onAttack();
   }
-// <button className="pausebutton" onClick={GoToMenu}>Pause</button>
+
   return (
     <div>
       <button className="pausebutton" onClick={GoToMenu}>Pause</button>
