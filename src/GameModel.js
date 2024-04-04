@@ -1,3 +1,6 @@
+import { joke } from "./jokeSource";
+import { resolvePromise } from "./resolvePromise";
+
 const model = {
 
     mcAlive: true,
@@ -11,7 +14,7 @@ const model = {
     enemyMaxHp: 100,
     enemyHp: 100,
     enemyAttack: 10,
-    joke: null,
+    joke: {},
 
     inCombat: false,
 
@@ -26,9 +29,8 @@ const model = {
         }
     },
 
-    getJoke(){
-        // api saker
-        this.joke = "What`s the smartest insect? A spelling bee!"
+    getJoke(categories,blacklist){
+        resolvePromise(joke(categories,blacklist), this.joke)
     },
 
     getAttacked(){
