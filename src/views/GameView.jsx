@@ -2,7 +2,7 @@ export function GameView(props) {
   function GoToMenu() {
     window.location.hash = "#/menu";
   }
-  console.log(props.inCombat)
+
   function AttackACB(event) {
     props.onAttack();
   }
