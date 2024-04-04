@@ -26,11 +26,17 @@ const Game = observer(
         mcAlive: props.model.mcAlive
       });
     }
+      EventBus.removeAllListeners("endAttack") // a listener is created every time the observer reacts to model update, we only want 1
+      EventBus.on("endAttack", (data) => {
+        props.model.combatToggle()
+      })
+
+
 
     return (
       <>
         <PhaserGame ref={phaserRef} />
-        <GameView onAttack={onAttackACB} />
+        <GameView inCombat={props.model.inCombat} onAttack={onAttackACB} />
       </>
     );
   }
