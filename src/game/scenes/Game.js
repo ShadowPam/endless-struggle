@@ -56,7 +56,6 @@ export class Game extends Scene {
 
     var mc = this.add.sprite(450, 600)
     mc.scale = 5;
-
     mc.play("mcAnimationIdle")
 
     this.add.rectangle(450, 700, 150, 20).setStrokeStyle(4, 0x000000);
@@ -88,8 +87,9 @@ export class Game extends Scene {
 
     var enemy = this.add.sprite(1470, 600, "enemy")
     enemy.scale = 5;
+    enemy.hasDied = false
 
-    enemy.play("eAnimation")
+    enemy.play("enemyAnimationIdle")
 
     this.add
       .text(1470, 695, "Enemy name", {
@@ -117,23 +117,92 @@ export class Game extends Scene {
       })
       .setOrigin(0.5);
 
+    var enemyAttack = this.add.text(1000, 600, "").setVisible(false)
+
+    // function typewriteText(text)
+    // {
+    //   const length = text.length
+    //   let i = 0
+    //   this.Clock.addEvent({
+    //     callback: () => {
+    //       this.label.text += text[i]
+    //       ++i
+    //     },
+    //     repeat: length - 1,
+    //     delay: 200
+    //   })
+    // }
+
     // BUS
     EventBus.emit("current-scene-ready", this);
 
     // EVENTS
     EventBus.on("initAttack", (data) => {
-      console.log(data)
-      mc.play("mcAnimationAttack")
-      mc.chain("mcAnimationIdle")
-      console.log(mc.anims.getFrameName())
-      enemyBar.width = data.enemyHp*(146/data.enemyMaxHp)
-      enemyBarText.setText(data.enemyHp + "/" + data.enemyMaxHp)
+      const attackTimeline = this.add.timeline([
+        {
+          at: 0,
+          run: () => {
+          mc.x = 1350
+          mc.y = 610
+          }
+        },
+        {
+          at: 100,
+          run: () => {
+          mc.play("mcAnimationAttack")
+          mc.chain("mcAnimationIdle")
+          }
+        },
+        {
+          at: 500,
+          run: () => {
+          enemyBar.width = data.enemyHp*(146/data.enemyMaxHp)
+          enemyBarText.setText(data.enemyHp + "/" + data.enemyMaxHp)
+          }
+        },
+        {
+          at: 900,
+          run: () => {
+          mc.x = 450
+          mc.y = 600
+          }
+        },
+      ]);
 
-      mc.on(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
-        console.log(data)
+      const responseTimeline = this.add.timeline([
+      {
+        at: 1700,
+        run: () => {
+        if (data.enemyAlive){
+          enemyAttack.setText(data.joke)
+          enemyAttack.setVisible(true)
+        }
+        else{
+          if(!enemy.hasDied){
+            enemy.hasDied = true
+            enemy.play("enemyAnimationDead")
+          }
+        }
+        }
+      },
+      {
+        at: 2200,
+        run: () => {
         mcBar.width = data.mcHp*(146/data.mcMaxHp)
         mcBarText.setText(data.mcHp + "/" + data.mcMaxHp)
-      })
+        }
+      },
+      {
+        at: 2700,
+        run: () => {
+        enemyAttack.setVisible(false)
+        EventBus.emit("endAttack")
+        }
+      },
+    ]);
+      console.log(data)
+      attackTimeline.play()
+      responseTimeline.play()
     });
 
   }

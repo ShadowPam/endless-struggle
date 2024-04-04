@@ -77,12 +77,21 @@ export class Preloader extends Scene
           });
 
         this.anims.create({
-            key: "eAnimation",
+            key: "enemyAnimationIdle",
             frames: this.anims.generateFrameNumbers("enemy", {
               frames: [6, 6, 7, 7],
             }),
             frameRate: 5,
             repeat: -1,
+          });
+
+        this.anims.create({
+            key: "enemyAnimationDead",
+            frames: this.anims.generateFrameNumbers("enemy", {
+              frames: [63,62,61,60,59,58],
+            }),
+            frameRate: 10,
+            repeat: 0,
           });
         
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
