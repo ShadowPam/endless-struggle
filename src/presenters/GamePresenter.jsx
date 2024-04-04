@@ -8,15 +8,14 @@ const Game = observer(
   function GameRender(props){
     const phaserRef = useRef();
     if(props.model.joke.data != null){
-      console.log("number")
       EventBus.emit("continueAttack",{joke:props.model.joke.data})
       props.model.joke.data = null
     }
     function onAttackACB() {
       props.model.combatToggle()
+      props.model.getJoke(["Any"],["nsfw","religious","political","racist","sexist","explicit"])
       props.model.doAttack()
       if (props.model.enemyAlive){
-        props.model.getJoke(["Any"],["nsfw","religious","political","racist","sexist","explicit"])
         props.model.getAttacked()
       }
 
@@ -33,8 +32,6 @@ const Game = observer(
     }
       EventBus.removeAllListeners("endAttack") // a listener is created every time the observer reacts to model update, we only want 1
       EventBus.on("endAttack", (data) => {
-        console.log("HERE")
-        console.log(EventBus.listenerCount())
         props.model.combatToggle()
       })
 
