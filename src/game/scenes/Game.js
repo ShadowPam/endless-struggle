@@ -10,6 +10,7 @@ export class Game extends Scene {
 
   init() {    
     EventBus.removeListener("initAttack")
+    EventBus.removeListener("continueAttack")
   }
 
   create() {
@@ -118,6 +119,7 @@ export class Game extends Scene {
       .setOrigin(0.5);
 
     var enemyAttack = this.add.text(1000, 600, "").setVisible(false)
+    enemyAttack.setTint(0xFFFFFF);
 
     // function typewriteText(text)
     // {
@@ -168,43 +170,45 @@ export class Game extends Scene {
           }
         },
       ]);
-
-      const responseTimeline = this.add.timeline([
-      {
-        at: 1700,
-        run: () => {
-        if (data.enemyAlive){
-          enemyAttack.setText(data.joke)
-          enemyAttack.setVisible(true)
-        }
-        else{
-          if(!enemy.hasDied){
-            enemy.hasDied = true
-            enemy.play("enemyAnimationDead")
-          }
-        }
-        }
-      },
-      {
-        at: 2200,
-        run: () => {
-        mcBar.width = data.mcHp*(146/data.mcMaxHp)
-        mcBarText.setText(data.mcHp + "/" + data.mcMaxHp)
-        }
-      },
-      {
-        at: 2700,
-        run: () => {
-        enemyAttack.setVisible(false)
-        EventBus.emit("endAttack")
-        }
-      },
-    ]);
-      console.log(data)
+      this.enemyAlive = data.enemyAlive
+      this.mcMaxHp = data.mcMaxHp
+      this.mcHp = data.mcHp
       attackTimeline.play()
-      responseTimeline.play()
     });
-
+    EventBus.on("continueAttack", (joke) => {
+      const responseTimeline = this.add.timeline([
+        {
+          at: 1700,
+          run: () => {
+          if (this.enemyAlive){
+            enemyAttack.setText(joke.joke)
+            enemyAttack.setVisible(true)
+          }
+          else{
+            if(!enemy.hasDied){
+              enemy.hasDied = true
+              enemy.play("enemyAnimationDead")
+            }
+          }
+          }
+        },
+        {
+          at: 2200,
+          run: () => {
+          mcBar.width = this.mcHp*(146/this.mcMaxHp)
+          mcBarText.setText(this.mcHp + "/" + this.mcMaxHp)
+          }
+        },
+        {
+          at: 4500,
+          run: () => {
+          enemyAttack.setVisible(false)
+          EventBus.emit("endAttack")
+          }
+        },
+      ]);
+      responseTimeline.play()
+    })
   }
 
   changeScene() {
