@@ -13,7 +13,7 @@ const Game = observer(
     }
     function onAttackACB() {
       props.model.combatToggle()
-      props.model.getJoke(["Any"],["nsfw","religious","political","racist","sexist","explicit"])
+      props.model.getJoke(["Any"],["nsfw","religious","political","racist","sexist","explicit"],true)
       props.model.doAttack()
       if (props.model.enemyAlive){
         props.model.getAttacked()

@@ -29,8 +29,8 @@ const model = {
         }
     },
 
-    getJoke(categories,blacklist){
-        resolvePromise(joke(categories,blacklist), this.joke)
+    getJoke(categories,blacklist,safe){
+        resolvePromise(joke(categories,blacklist,safe), this.joke)
     },
 
     getAttacked(){

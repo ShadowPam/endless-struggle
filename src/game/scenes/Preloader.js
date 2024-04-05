@@ -53,8 +53,6 @@ export class Preloader extends Scene
             endFrame: 72,
             }
         });
-        this.load.image('logo', 'logo.png');
-        this.load.image('star', 'star.png');
         this.load.image('background', 'bgtest.jpg');
     }
 

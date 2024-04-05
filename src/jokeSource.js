@@ -1,4 +1,4 @@
-export function joke(categories,blacklist) {
+export function joke(categories,blacklist,safe) {
     
     function someACB(response) {
       return response.json();
@@ -15,7 +15,12 @@ export function joke(categories,blacklist) {
     const categoryString = categories.toString()
     const blacklistString = "blacklistFlags=" + blacklist.toString()
     const queryString = categoryString + "?" + blacklistString
-    return fetch("https://v2.jokeapi.dev/joke/" + queryString, options)
+    let safeString = ""
+    if(safe){
+      safeString = "&safe-mode"
+    }
+
+    return fetch("https://v2.jokeapi.dev/joke/" + queryString + safeString, options)
       .then(someACB)
       .then(getArrayACB);
   }
