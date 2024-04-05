@@ -211,12 +211,12 @@ export class Game extends Scene {
     })
   }
 
-  changeScene() {
-    if (this.logoTween) {
-      this.logoTween.stop();
-      this.logoTween = null;
-    }
+  // changeScene() {
+  //   if (this.logoTween) {
+  //     this.logoTween.stop();
+  //     this.logoTween = null;
+  //   }
 
-    this.scene.start("idk");
-  }
+  //   this.scene.start("idk");
+  // }
 }
