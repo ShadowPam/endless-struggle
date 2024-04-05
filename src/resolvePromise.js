@@ -1,4 +1,4 @@
-export function resolvePromise(prms, promiseState) {
+export function resolvePromise(prms, promiseState) { // from dinner planner
 
   function dataACB(result) {
     if (promiseState.promise == prms) {
