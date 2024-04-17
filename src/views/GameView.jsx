@@ -9,10 +9,11 @@ export function GameView(props) {
   return (
     <div>
       <button className="pausebutton" onClick={GoToMenu}>Pause</button>
+      <img className="jokestatus" src={props.jokeStatus.src} alt={props.jokeStatus.alt}></img>
       <div id="buttons">
-        <button disabled={props.inCombat} className="button attackbutton" onClick={AttackACB}>ATTACK</button>
-        <button disabled={props.inCombat} className="button shieldbutton">SHIELD</button>
-        <button disabled={props.inCombat} className="button dodgebutton">DODGE</button>
+        <button disabled={props.combatState!==0} className="button attackbutton" onClick={AttackACB}>ATTACK</button>
+        <button disabled={props.combatState!==0} className="button shieldbutton">SHIELD</button>
+        <button disabled={props.combatState!==0} className="button dodgebutton">DODGE</button>
       </div>
     </div>
   );

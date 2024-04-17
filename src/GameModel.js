@@ -6,7 +6,7 @@ const model = {
     mcAlive: true,
     mcMaxHp: 100,
     mcHp: 100,
-    mcAttack: 10,
+    mcAttack: 40,
     mcDefence: 0,
     mcDodge: 0.3,
 
@@ -14,12 +14,19 @@ const model = {
     enemyMaxHp: 100,
     enemyHp: 100,
     enemyAttack: 10,
-    joke: {},
 
-    inCombat: false,
+    jokePromiseState: {},
 
-    combatToggle(){
-        this.inCombat = !this.inCombat;
+    combatState: 0,
+    actionIntent: "",
+
+
+    setCombatState(value){
+        this.combatState = value;
+    },
+
+    declareActionIntent(choice){
+        this.actionIntent = choice
     },
 
     doAttack(){
@@ -30,7 +37,7 @@ const model = {
     },
 
     getJoke(categories,blacklist,safe){
-        resolvePromise(joke(categories,blacklist,safe), this.joke)
+        resolvePromise(joke(categories,blacklist,safe), this.jokePromiseState)
     },
 
     getAttacked(){

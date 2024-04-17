@@ -4,7 +4,7 @@ import StartGame from "./main";
 import { EventBus } from "./EventBus";
 
 export const PhaserGame = forwardRef(function PhaserGame(
-  { currentActiveScene },
+  props,
   ref
 ) {
   const game = useRef();
@@ -14,11 +14,10 @@ export const PhaserGame = forwardRef(function PhaserGame(
     if (game.current === undefined) {
       game.current = StartGame("game-container");
 
-      if (ref !== null) {
+      if (ref !== null && ref !== undefined) {
         ref.current = { game: game.current, scene: null };
       }
     }
-
     return () => {
       if (game.current) {
         game.current.destroy(true);
@@ -29,21 +28,15 @@ export const PhaserGame = forwardRef(function PhaserGame(
 
   useEffect(() => {
     EventBus.on("current-scene-ready", (currentScene) => {
-      if (currentActiveScene instanceof Function) {
-        currentActiveScene(currentScene);
-        ref.current.scene = currentScene;
-      }
+        if (ref !== null && ref !== undefined) {
+          ref.current.scene = currentScene;
+        }
     });
 
     return () => {
       EventBus.removeListener("current-scene-ready");
     };
-  }, [currentActiveScene, ref]);
+  }, [ref]);
 
   return <div className="game" id="game-container"></div>;
 });
-
-// Props definitions
-PhaserGame.propTypes = {
-  currentActiveScene: PropTypes.func,
-};

@@ -9,17 +9,15 @@ export class Game extends Scene {
   }
 
   init() {    
-    EventBus.removeListener("initAttack")
-    EventBus.removeListener("continueAttack")
   }
 
   create() {
 
     // SCENE CREATION
     this.cameras.main.fadeIn(500, 0, 0, 0);
-    var bg = this.add.image(960, 330, "background");
-    bg.scale = 0.315;
-    bg.setAlpha(1);
+    this.bg = this.add.image(960, 330, "background");
+    this.bg.scale = 0.315;
+    this.bg.setAlpha(1);
 
     this.add
       .text(300, 100, "Stats", {
@@ -55,15 +53,15 @@ export class Game extends Scene {
       })
       .setOrigin(0.5);
 
-    var mc = this.add.sprite(450, 600)
-    mc.scale = 5;
-    mc.play("mcAnimationIdle")
+    this.mc = this.add.sprite(450, 600)
+    this.mc.scale = 5;
+    this.mc.play("mcAnimationIdle")
 
     this.add.rectangle(450, 700, 150, 20).setStrokeStyle(4, 0x000000);
-    var mcBar = this.add.rectangle(450 - 150 / 2 + 2, 700, 0, 16, 0xff0000);
-    mcBar.width = 146;
+    this.mcBar = this.add.rectangle(450 - 150 / 2 + 2, 700, 0, 16, 0xff0000);
+    this.mcBar.width = 146;
 
-    var mcBarText = this.add
+    this.mcBarText = this.add
       .text(450, 700, "100/100", {
         fontFamily: "Arial Black",
         fontSize: 14,
@@ -75,7 +73,7 @@ export class Game extends Scene {
       .setOrigin(0.5);
 
     // ENEMY CREATION
-    this.add
+    this.enemyAttack = this.add
       .text(1420, 500, "DMG", {
         fontFamily: "Arial Black",
         fontSize: 18,
@@ -86,11 +84,11 @@ export class Game extends Scene {
       })
       .setOrigin(0.5);
 
-    var enemy = this.add.sprite(1470, 600, "enemy")
-    enemy.scale = 5;
-    enemy.hasDied = false
+    this.enemy = this.add.sprite(1470, 600, "enemy")
+    this.enemy.scale = 5;
+    this.enemy.hasDied = false
 
-    enemy.play("enemyAnimationIdle")
+    this.enemy.play("enemyAnimationIdle")
 
     this.add
       .text(1470, 695, "Enemy name", {
@@ -104,10 +102,10 @@ export class Game extends Scene {
       .setOrigin(0.5);
 
     this.add.rectangle(1470, 725, 150, 20).setStrokeStyle(4, 0x000000);
-    var enemyBar = this.add.rectangle(1470 - 150 / 2 + 2, 725, 0, 16, 0xff0000);
-    enemyBar.width = 146;
+    this.enemyBar = this.add.rectangle(1470 - 150 / 2 + 2, 725, 0, 16, 0xff0000);
+    this.enemyBar.width = 146;
 
-    var enemyBarText = this.add
+    this.enemyBarText = this.add
       .text(1470, 725, "100/100", {
         fontFamily: "Arial Black",
         fontSize: 14,
@@ -118,8 +116,8 @@ export class Game extends Scene {
       })
       .setOrigin(0.5);
 
-    var enemyAttack = this.add.text(1000, 600, "").setVisible(false)
-    enemyAttack.setTint(0xFFFFFF);
+    this.enemyAttack = this.add.text(1000, 600, "").setVisible(false)
+    this.enemyAttack.setTint(0xFFFFFF);
 
     // function typewriteText(text)
     // {
@@ -139,78 +137,79 @@ export class Game extends Scene {
     EventBus.emit("current-scene-ready", this);
 
     // EVENTS
-    EventBus.on("initAttack", (data) => {
-      const attackTimeline = this.add.timeline([
-        {
-          at: 0,
-          run: () => {
-          mc.x = 1350
-          mc.y = 610
+  }
+
+  doAttackAnimate(props){
+    const attackTimeline = this.add.timeline([
+      {
+        at: 0,
+        run: () => {
+          this.mc.x = 1350
+          this.mc.y = 610
+        }
+      },
+      {
+        at: 100,
+        run: () => {
+          this.mc.play("mcAnimationAttack")
+          this.mc.chain("mcAnimationIdle")
+        }
+      },
+      {
+        at: 500,
+        run: () => {
+          this.enemyBar.width = props.enemyHp*(146/props.enemyMaxHp)
+          this.enemyBarText.setText(props.enemyHp + "/" + props.enemyMaxHp)
+        }
+      },
+      {
+        at: 900,
+        run: () => {
+          this.mc.x = 450
+          this.mc.y = 600
+          if(props.enemyAlive){
+            props.setCombatState(3)
           }
-        },
-        {
-          at: 100,
-          run: () => {
-          mc.play("mcAnimationAttack")
-          mc.chain("mcAnimationIdle")
+          else{
+            props.setCombatState(4)
           }
-        },
+        }
+      },
+    ]);
+
+    this.enemyAlive = props.enemyAlive
+    this.mcMaxHp = props.mcMaxHp
+    this.mcHp = props.mcHp
+    attackTimeline.play()
+  }
+
+  getAttackedAnimate(props){
+    const responseTimeline = this.add.timeline([
         {
           at: 500,
           run: () => {
-          enemyBar.width = data.enemyHp*(146/data.enemyMaxHp)
-          enemyBarText.setText(data.enemyHp + "/" + data.enemyMaxHp)
-          }
-        },
-        {
-          at: 900,
-          run: () => {
-          mc.x = 450
-          mc.y = 600
-          }
-        },
-      ]);
-      this.enemyAlive = data.enemyAlive
-      this.mcMaxHp = data.mcMaxHp
-      this.mcHp = data.mcHp
-      attackTimeline.play()
-    });
-    EventBus.on("continueAttack", (joke) => {
-      const responseTimeline = this.add.timeline([
-        {
-          at: 1700,
-          run: () => {
-          if (this.enemyAlive){
-            enemyAttack.setText(joke.joke)
-            enemyAttack.setVisible(true)
-          }
-          else{
-            if(!enemy.hasDied){
-              enemy.hasDied = true
-              enemy.play("enemyAnimationDead")
+            this.enemyAttack.setText(props.jokePromiseState.data)
+            this.enemyAttack.setVisible(true)
             }
-          }
+        },
+        {
+          at: 1000,
+          run: () => {
+            this.mcBar.width = this.mcHp*(146/this.mcMaxHp)
+            this.mcBarText.setText(this.mcHp + "/" + this.mcMaxHp)
           }
         },
         {
-          at: 2200,
+          at: 3200,
           run: () => {
-          mcBar.width = this.mcHp*(146/this.mcMaxHp)
-          mcBarText.setText(this.mcHp + "/" + this.mcMaxHp)
-          }
-        },
-        {
-          at: 4500,
-          run: () => {
-          enemyAttack.setVisible(false)
-          EventBus.emit("endAttack")
+            this.enemyAttack.setVisible(false)
+            props.setCombatState(0)
           }
         },
       ]);
-      responseTimeline.play()
-    })
+    responseTimeline.play()
   }
-
+  
   // changeScene() {
   //   if (this.logoTween) {
   //     this.logoTween.stop();
