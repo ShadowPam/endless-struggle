@@ -23,7 +23,7 @@ const Game = observer(
         props.model.setCombatState(2)
       }
     }, [props.model.jokePromiseState.data]);
-    
+
 
     // do actions based on the combat state
     useEffect(() => {
@@ -50,7 +50,7 @@ const Game = observer(
       // 3 - you have performed your action, now the enemy will attack
       if(props.model.combatState == 3){
         props.model.getAttacked()
-        scene.getAttackedAnimate(props.model) // combatState is updated at the end of animation
+        scene.getAttackedAnimate(props.model) // combatState is updated at the end of animation -> 0
       }
 
       // 4 - you have performed your action and the enemy was defeated
