@@ -98,6 +98,16 @@ body {
     }
 }
 
+.modalbutton {
+    &:hover {
+        border: 4px solid #ffffff;
+        color: #ffffff;
+    }
+    &:active {
+        background-color: #ffffff;
+    }
+}
+
 /*Menu styles */
 
 .menu {

@@ -8,7 +8,9 @@ export class Game extends Scene {
     super("Game");
   }
 
-  init() {    
+  init() {  
+    console.log("eqwdeas")
+    EventBus.emit("current-scene-ready", this);  
   }
 
   create() {
@@ -16,7 +18,6 @@ export class Game extends Scene {
     // SCENE CREATION
     this.cameras.main.fadeIn(500, 0, 0, 0);
     this.bg = this.add.image(960, 330, "background");
-    this.bg.scale = 0.315;
     this.bg.setAlpha(1);
 
     this.add
@@ -118,7 +119,7 @@ export class Game extends Scene {
 
     this.enemyAttack = this.add.text(1000, 600, "").setVisible(false)
     this.enemyAttack.setTint(0xFFFFFF);
-
+    
     // function typewriteText(text)
     // {
     //   const length = text.length
@@ -132,7 +133,10 @@ export class Game extends Scene {
     //     delay: 200
     //   })
     // }
-
+    this.cam = this.cameras.main;
+    this.targetScene = this.scene.get("Modal"); // sleeping
+    this.targetCam = this.targetScene.cameras.main;
+    this.defaultWidth = this.cameras.default.width;
     // BUS
     EventBus.emit("current-scene-ready", this);
 
@@ -209,13 +213,42 @@ export class Game extends Scene {
       ]);
     responseTimeline.play()
   }
-  
-  // changeScene() {
-  //   if (this.logoTween) {
-  //     this.logoTween.stop();
-  //     this.logoTween = null;
-  //   }
 
-  //   this.scene.start("idk");
+  // changeScene() {
+  //   this.cameras.main.fadeOut(1000, 0, 0, 0, (camera, progress) => {
+  //     if(progress === 1){
+  //       this.scene.start("Modal");
+  //     }
+  //   });
   // }
+  changeScene(props){
+    EventBus.emit("current-scene-ready", this.targetScene);
+  }
+  
+  changeToRewardScreen(props) {
+    this.enemy.play("enemyAnimationDead")
+    this.enemy.once('animationcomplete', ()=>{ 
+      this.scene.transition({
+        target: "Modal",
+        sleep: true,
+        duration: 2500,
+        onUpdate: function (progress) {
+          const t = Phaser.Math.Easing.Expo.InOut(progress);
+  
+          this.cam.setViewport(0, 0, (1 - t) * this.defaultWidth, this.cam.height);
+          this.cam.setScroll(t * this.defaultWidth, 0);
+          this.targetCam.setViewport(
+            (1 - t) * this.defaultWidth,
+            0,
+            t * this.defaultWidth,
+            this.targetCam.height
+          );
+          if(progress==1){
+            props.setCombatState(5)
+          }
+        }
+      });
+    });
+  }
 }
+

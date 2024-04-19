@@ -53,7 +53,11 @@ export class Preloader extends Scene
             endFrame: 72,
             }
         });
-        this.load.image('background', 'bgtest.jpg');
+        this.load.image('background', 'background.png');
+        this.load.image('ModalBackground', 'ModalBackground.png');
+        this.load.image('AttackIcon', 'AttackIconScaled.png');
+        this.load.image('ShieldIcon', 'ShieldIconScaled.png');
+        this.load.image('DodgeIcon', 'DodgeIconScaled.png');
     }
 
     create ()
@@ -86,9 +90,9 @@ export class Preloader extends Scene
         this.anims.create({
             key: "enemyAnimationDead",
             frames: this.anims.generateFrameNumbers("enemy", {
-              frames: [63,62,61,60,59,58],
+              frames: [63,62,61,60,59,58,58,58,58],
             }),
-            frameRate: 10,
+            frameRate: 7,
             repeat: 0,
           });
         

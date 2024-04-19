@@ -1,4 +1,5 @@
 import { GameView } from "../views/GameView";
+import { ModalView } from "../views/ModalView";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef} from "react";
 import { PhaserGame } from "../game/PhaserGame";
@@ -9,13 +10,45 @@ const Game = observer(
 
     const phaserRef = useRef();
 
-
     // if scene.scene.key == "game"
     function onAttackACB() {
       props.model.setCombatState(1)
       props.model.declareActionIntent("attack")
     }
 
+    function onLeftACB() {
+      props.model.setCombatState(6)
+    }
+
+    function mouseOnLeftACB(){
+      const scene = phaserRef.current.scene
+      scene.basicRewards[0].list[0].alpha = 1
+    }
+
+    function mouseOffLeftACB(){
+      const scene = phaserRef.current.scene
+      scene.basicRewards[0].list[0].alpha = 0.4
+    }
+
+    function mouseOnMiddleACB(){
+      const scene = phaserRef.current.scene
+      scene.basicRewards[1].list[0].alpha = 1
+    }
+
+    function mouseOffMiddleACB(){
+      const scene = phaserRef.current.scene
+      scene.basicRewards[1].list[0].alpha = 0.4
+    }
+
+    function mouseOnRightACB(){
+      const scene = phaserRef.current.scene
+      scene.basicRewards[2].list[0].alpha = 1
+    }
+
+    function mouseOffRightACB(){
+      const scene = phaserRef.current.scene
+      scene.basicRewards[2].list[0].alpha = 0.4
+    }
 
     // progress combat state when joke is aquired
     useEffect(() => {
@@ -55,8 +88,21 @@ const Game = observer(
 
       // 4 - you have performed your action and the enemy was defeated
       if(props.model.combatState == 4){
-        scene.enemy.play("enemyAnimationDead")
-        console.log("VICTORY!")
+        // choose reward method
+        scene.changeToRewardScreen(props.model) // combatState is updated at the end of animation -> 5
+        scene.changeScene()
+      }
+
+      // 5 - enemy died and you can now choose one of three rewards on screen.
+      if(props.model.combatState == 5){
+        scene.showRewards(props.model.basicRewards, true)
+      }
+
+      // 6 - Reward has been chosen and the scene changes back and a new round is prepared
+      if(props.model.combatState == 6){
+        scene.showRewards(props.model.basicRewards, false)
+        scene.changeToCombatScreen(props.model) // combatState is updated at the end of animation -> 0
+        scene.changeScene()
       }
     }
     }, [props.model.combatState]);
@@ -75,14 +121,26 @@ const Game = observer(
       }
       return({src:"/assets/transparentBox.png", alt:"NoData"})
   }
-
-    return (
-      <>
-        <PhaserGame ref={phaserRef}  />
-        <GameView combatState={props.model.combatState} onAttack={onAttackACB} jokeStatus={showPromiseState(props.model.jokePromiseState)}
-        />
-      </>
-    );
+    if(props.model.combatState==5){
+      return (
+        <>
+          <PhaserGame ref={phaserRef}/>
+          <ModalView 
+          mouseOnLeft={mouseOnLeftACB} mouseOffLeft={mouseOffLeftACB}
+          mouseOnMiddle={mouseOnMiddleACB} mouseOffMiddle={mouseOffMiddleACB}
+          mouseOnRight={mouseOnRightACB} mouseOffRight={mouseOffRightACB}
+          onLeft={onLeftACB}/>
+        </>
+      );
+    }
+    else{
+      return (
+        <>
+          <PhaserGame ref={phaserRef}/>
+          <GameView combatState={props.model.combatState} onAttack={onAttackACB} jokeStatus={showPromiseState(props.model.jokePromiseState)}/>
+        </>
+      );
+    }
   }
 );
 

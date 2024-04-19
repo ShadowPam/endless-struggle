@@ -6,7 +6,7 @@ const model = {
     mcAlive: true,
     mcMaxHp: 100,
     mcHp: 100,
-    mcAttack: 40,
+    mcAttack: 100,
     mcDefence: 0,
     mcDodge: 0.3,
 
@@ -19,6 +19,11 @@ const model = {
 
     combatState: 0,
     actionIntent: "",
+
+    basicRewards:[
+    {image:"AttackIcon",statText:"+ 10 ATK",attack:10},
+    {image:"ShieldIcon",statText:"+ 10 ATK",attack:10},
+    {image:"DodgeIcon",statText:"+ 10 ATK",attack:10}],
 
 
     setCombatState(value){

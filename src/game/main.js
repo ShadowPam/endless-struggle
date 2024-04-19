@@ -1,5 +1,6 @@
 import { Boot } from './scenes/Boot';
 import { Game } from './scenes/Game';
+import { Modal } from './scenes/Modal';
 import Phaser from 'phaser';
 import { Preloader } from './scenes/Preloader';
 
@@ -15,6 +16,7 @@ const config = {
         Boot,
         Preloader,
         Game,
+        Modal,
     ]
 };
 
