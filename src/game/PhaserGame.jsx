@@ -14,6 +14,9 @@ export const PhaserGame = forwardRef(function PhaserGame(
     if (game.current === undefined) {
       game.current = StartGame("game-container");
 
+      // data used to create scene on startup/reload
+      game.current.config.initData = props.initData
+
       if (ref !== null && ref !== undefined) {
         ref.current = { game: game.current, scene: null };
       }
@@ -30,7 +33,6 @@ export const PhaserGame = forwardRef(function PhaserGame(
     EventBus.on("current-scene-ready", (currentScene) => {
         if (ref !== null && ref !== undefined) {
           ref.current.scene = currentScene;
-          console.log(currentScene)
         }
     });
 

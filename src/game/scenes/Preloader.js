@@ -44,8 +44,8 @@ export class Preloader extends Scene
             }
         });
         this.load.spritesheet({
-        key: "enemy",
-        url: "spritesheetE.png",
+        key: "enemy1",
+        url: "spritesheetEnemy1.png",
         frameConfig: {
             frameWidth: 32,
             frameHeight: 32,
@@ -53,6 +53,27 @@ export class Preloader extends Scene
             endFrame: 72,
             }
         });
+        this.load.spritesheet({
+          key: "enemy2",
+          url: "spritesheetEnemy2.png",
+          frameConfig: {
+              frameWidth: 32,
+              frameHeight: 32,
+              startFrame: 0,
+              endFrame: 8,
+              }
+          });
+        this.load.spritesheet({
+          key: "enemy3",
+          url: "spritesheetEnemy3.png",
+          frameConfig: {
+              frameWidth: 32,
+              frameHeight: 32,
+              startFrame: 0,
+              endFrame: 2,
+              }
+          });
+        
         this.load.image('background', 'background.png');
         this.load.image('ModalBackground', 'ModalBackground.png');
         this.load.image('AttackIcon', 'AttackIconScaled.png');
@@ -79,8 +100,8 @@ export class Preloader extends Scene
           });
 
         this.anims.create({
-            key: "enemyAnimationIdle",
-            frames: this.anims.generateFrameNumbers("enemy", {
+            key: "enemy1AnimationIdle",
+            frames: this.anims.generateFrameNumbers("enemy1", {
               frames: [6, 6, 7, 7],
             }),
             frameRate: 5,
@@ -88,11 +109,43 @@ export class Preloader extends Scene
           });
 
         this.anims.create({
-            key: "enemyAnimationDead",
-            frames: this.anims.generateFrameNumbers("enemy", {
+            key: "enemy1AnimationDead",
+            frames: this.anims.generateFrameNumbers("enemy1", {
               frames: [63,62,61,60,59,58,58,58,58],
             }),
             frameRate: 7,
+            repeat: 0,
+          });
+        this.anims.create({
+            key: "enemy2AnimationIdle",
+            frames: this.anims.generateFrameNumbers("enemy2", {
+              frames: [0,0,0,1,1,2,3,2,1],
+            }),
+            frameRate: 10,
+            repeat: -1,
+          });
+        this.anims.create({
+            key: "enemy2AnimationDead",
+            frames: this.anims.generateFrameNumbers("enemy2", {
+              frames: [1,0,4,5,6,7],
+            }),
+            frameRate: 3,
+            repeat: 0,
+          });
+          this.anims.create({
+            key: "enemy3AnimationIdle",
+            frames: this.anims.generateFrameNumbers("enemy3", {
+              frames: [0,0,0,0,1,1,1,0,1,1,1],
+            }),
+            frameRate: 5,
+            repeat: -1,
+          });
+          this.anims.create({
+            key: "enemy3AnimationDead",
+            frames: this.anims.generateFrameNumbers("enemy3", {
+              frames: [0,0,1,2,2],
+            }),
+            frameRate: 3,
             repeat: 0,
           });
         

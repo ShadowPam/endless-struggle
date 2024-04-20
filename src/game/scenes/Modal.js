@@ -69,7 +69,6 @@ export class Modal extends Scene {
     this.basicRewards[0].setVisible(bool)
     this.basicRewards[1].setVisible(bool)
     this.basicRewards[2].setVisible(bool)
-    console.log("hide")
   }
 
   changeScene(props){

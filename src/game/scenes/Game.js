@@ -2,37 +2,36 @@ import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 
 export class Game extends Scene {
-  logoTween;
 
   constructor() {
     super("Game");
   }
 
   init() {  
-    console.log("eqwdeas")
-    EventBus.emit("current-scene-ready", this);  
   }
 
   create() {
-
     // SCENE CREATION
     this.cameras.main.fadeIn(500, 0, 0, 0);
     this.bg = this.add.image(960, 330, "background");
     this.bg.setAlpha(1);
 
-    this.add
-      .text(300, 100, "Stats", {
+    this.stats = this.add
+      .text(300, 100, 
+        "Attack:  " + this.game.config.initData.mcAttack + "\n" +
+        "Defence: " + this.game.config.initData.mcDefence + "\n" +
+        "Dodge: " + this.game.config.initData.mcDodge*100 + "%" ,{
         fontFamily: "Arial Black",
         fontSize: 18,
         color: "#ffffff",
         stroke: "#000000",
         strokeThickness: 4,
-        align: "center",
+        align: "left",
       })
       .setOrigin(0.5);
 
-    this.add
-      .text(1620, 100, "Current round", {
+    this.round = this.add
+      .text(1620, 100, this.game.config.initData.currentRound, {
         fontFamily: "Arial Black",
         fontSize: 18,
         color: "#ffffff",
@@ -44,7 +43,7 @@ export class Game extends Scene {
 
     // MC CREATION
     this.add
-      .text(450, 500, "Player name", {
+      .text(445, 500, this.game.config.initData.mcName, {
         fontFamily: "Arial Black",
         fontSize: 18,
         color: "#ffffff",
@@ -60,10 +59,10 @@ export class Game extends Scene {
 
     this.add.rectangle(450, 700, 150, 20).setStrokeStyle(4, 0x000000);
     this.mcBar = this.add.rectangle(450 - 150 / 2 + 2, 700, 0, 16, 0xff0000);
-    this.mcBar.width = 146;
+    this.mcBar.width = this.game.config.initData.mcHp*(146/this.game.config.initData.mcMaxHp)
 
     this.mcBarText = this.add
-      .text(450, 700, "100/100", {
+      .text(450, 700, this.game.config.initData.mcHp + "/" + this.game.config.initData.mcMaxHp, {
         fontFamily: "Arial Black",
         fontSize: 14,
         color: "#ffffff",
@@ -75,7 +74,7 @@ export class Game extends Scene {
 
     // ENEMY CREATION
     this.enemyAttack = this.add
-      .text(1420, 500, "DMG", {
+      .text(1420, 500, this.game.config.initData.enemyAttack, {
         fontFamily: "Arial Black",
         fontSize: 18,
         color: "#ffffff",
@@ -85,14 +84,13 @@ export class Game extends Scene {
       })
       .setOrigin(0.5);
 
-    this.enemy = this.add.sprite(1470, 600, "enemy")
+    this.enemy = this.add.sprite(1470, 600, this.game.config.initData.enemyKey)
     this.enemy.scale = 5;
-    this.enemy.hasDied = false
 
-    this.enemy.play("enemyAnimationIdle")
+    this.enemy.play(this.game.config.initData.enemyKey + "AnimationIdle")
 
-    this.add
-      .text(1470, 695, "Enemy name", {
+    this.enemyName = this.add
+      .text(1470, 695, this.game.config.initData.enemyName, {
         fontFamily: "Arial Black",
         fontSize: 18,
         color: "#ffffff",
@@ -104,10 +102,10 @@ export class Game extends Scene {
 
     this.add.rectangle(1470, 725, 150, 20).setStrokeStyle(4, 0x000000);
     this.enemyBar = this.add.rectangle(1470 - 150 / 2 + 2, 725, 0, 16, 0xff0000);
-    this.enemyBar.width = 146;
+    this.enemyBar.width = this.game.config.initData.enemyHp*(146/this.game.config.initData.enemyMaxHp)
 
     this.enemyBarText = this.add
-      .text(1470, 725, "100/100", {
+      .text(1470, 725, this.game.config.initData.enemyHp + "/" + this.game.config.initData.enemyMaxHp, {
         fontFamily: "Arial Black",
         fontSize: 14,
         color: "#ffffff",
@@ -117,8 +115,8 @@ export class Game extends Scene {
       })
       .setOrigin(0.5);
 
-    this.enemyAttack = this.add.text(1000, 600, "").setVisible(false)
-    this.enemyAttack.setTint(0xFFFFFF);
+    this.enemyJoke = this.add.text(1000, 600, "").setVisible(false)
+    this.enemyJoke.setTint(0xFFFFFF);
     
     // function typewriteText(text)
     // {
@@ -181,9 +179,6 @@ export class Game extends Scene {
       },
     ]);
 
-    this.enemyAlive = props.enemyAlive
-    this.mcMaxHp = props.mcMaxHp
-    this.mcHp = props.mcHp
     attackTimeline.play()
   }
 
@@ -192,26 +187,37 @@ export class Game extends Scene {
         {
           at: 500,
           run: () => {
-            this.enemyAttack.setText(props.jokePromiseState.data)
-            this.enemyAttack.setVisible(true)
+            this.enemyJoke.setText(props.jokePromiseState.data)
+            this.enemyJoke.setVisible(true)
             }
         },
         {
           at: 1000,
           run: () => {
-            this.mcBar.width = this.mcHp*(146/this.mcMaxHp)
-            this.mcBarText.setText(this.mcHp + "/" + this.mcMaxHp)
+            this.mcBar.width = props.mcHp*(146/props.mcMaxHp)
+            this.mcBarText.setText(props.mcHp + "/" + props.mcMaxHp)
           }
         },
         {
           at: 3200,
           run: () => {
-            this.enemyAttack.setVisible(false)
+            this.enemyJoke.setVisible(false)
             props.setCombatState(0)
           }
         },
       ]);
     responseTimeline.play()
+  }
+
+  updateScene(props){
+    this.enemyBar.width = props.enemyHp*(146/props.enemyMaxHp)
+    this.enemyBarText.setText(props.enemyHp + "/" + props.enemyMaxHp)
+    this.enemyAttack.setText(props.enemyAttack)
+    this.enemy.setTexture(props.enemyKey)
+    this.enemy.play(props.enemyKey + "AnimationIdle")
+    this.enemyName.setText(props.enemyName)
+    // this.stats
+    // this.round
   }
 
   // changeScene() {
@@ -226,7 +232,7 @@ export class Game extends Scene {
   }
   
   changeToRewardScreen(props) {
-    this.enemy.play("enemyAnimationDead")
+    this.enemy.play(props.enemyKey+"AnimationDead")
     this.enemy.once('animationcomplete', ()=>{ 
       this.scene.transition({
         target: "Modal",

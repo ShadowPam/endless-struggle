@@ -1,9 +1,12 @@
 import { joke } from "./jokeSource";
 import { resolvePromise } from "./resolvePromise";
+import enemies from "./Enemies.js";
+import basicRewards from "./BasicRewards.js";
 
 const model = {
 
     mcAlive: true,
+    mcName:"Player",
     mcMaxHp: 100,
     mcHp: 100,
     mcAttack: 100,
@@ -11,20 +14,46 @@ const model = {
     mcDodge: 0.3,
 
     enemyAlive: true,
+    enemyName:"Some guy",
+    enemyKey:"enemy1",
     enemyMaxHp: 100,
     enemyHp: 100,
-    enemyAttack: 10,
+    enemyAttack: 20,
+
+    currentRound: 0,
 
     jokePromiseState: {},
 
     combatState: 0,
     actionIntent: "",
 
-    basicRewards:[
-    {image:"AttackIcon",statText:"+ 10 ATK",attack:10},
-    {image:"ShieldIcon",statText:"+ 10 ATK",attack:10},
-    {image:"DodgeIcon",statText:"+ 10 ATK",attack:10}],
+    currentRewards:[],
+    currentEnemy:{},
 
+    getEnemy(){
+        this.currentEnemy = this.sample(enemies,1)[0]
+        this.enemyAlive = true
+        this.enemyName = this.currentEnemy.name
+        this.enemyKey = this.currentEnemy.key
+        this.enemyMaxHp = this.currentEnemy.health
+        this.enemyHp = this.enemyMaxHp
+        this.enemyAttack = this.currentEnemy.attack
+    },
+
+    getBasicRewards(){
+        this.currentRewards = this.sample(basicRewards,3)
+    },
+
+    sample(arr,nr) {
+        var j, x, index;
+        for (index = arr.length - 1; index > 0; index--) {
+            j = Math.floor(Math.random() * (index + 1));
+            x = arr[index];
+            arr[index] = arr[j];
+            arr[j] = x;
+        }
+        return arr.slice(0, nr);
+    },
 
     setCombatState(value){
         this.combatState = value;

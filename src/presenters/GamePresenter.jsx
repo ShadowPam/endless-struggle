@@ -62,7 +62,7 @@ const Game = observer(
     useEffect(() => {
       const scene = phaserRef.current.scene
       if(scene != null){
-      console.log(props.model.combatState)
+      // console.log(props.model.combatState)
 
       // 0 - you can declare your action intent
       if(props.model.combatState == 0){
@@ -95,14 +95,17 @@ const Game = observer(
 
       // 5 - enemy died and you can now choose one of three rewards on screen.
       if(props.model.combatState == 5){
-        scene.showRewards(props.model.basicRewards, true)
+        props.model.getBasicRewards()
+        scene.showRewards(props.model.currentRewards, true)
       }
 
       // 6 - Reward has been chosen and the scene changes back and a new round is prepared
       if(props.model.combatState == 6){
-        scene.showRewards(props.model.basicRewards, false)
+        scene.showRewards(props.model.currentRewards, false)
         scene.changeToCombatScreen(props.model) // combatState is updated at the end of animation -> 0
         scene.changeScene()
+        props.model.getEnemy()
+        scene.targetScene.updateScene(props.model)
       }
     }
     }, [props.model.combatState]);
@@ -134,9 +137,14 @@ const Game = observer(
       );
     }
     else{
+      const initData = {
+        mcName:props.model.mcName,mcMaxHp:props.model.mcMaxHp,mcHp:props.model.mcHp,mcAttack:props.model.mcAttack,mcDefence:props.model.mcDefence,mcDodge:props.model.mcDodge,
+        enemyName:props.model.enemyName,enemyKey:props.model.enemyKey,enemyMaxHp:props.model.enemyMaxHp,enemyHp:props.model.enemyHp,enemyAttack:props.model.enemyAttack,
+        currentRound:props.model.currentRound}
+
       return (
         <>
-          <PhaserGame ref={phaserRef}/>
+          <PhaserGame ref={phaserRef} initData={initData}/>
           <GameView combatState={props.model.combatState} onAttack={onAttackACB} jokeStatus={showPromiseState(props.model.jokePromiseState)}/>
         </>
       );
