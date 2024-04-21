@@ -4,6 +4,14 @@ export function ModalView(props) {
     props.onLeft();
   }
 
+  function chooseMiddleACB(event){
+    props.onMiddle();
+  }
+
+  function chooseRightACB(event){
+    props.onRight();
+  }
+
   function enterLeftACB(event){
     props.mouseOnLeft();
   }
@@ -31,8 +39,8 @@ export function ModalView(props) {
   return (
       <div id="buttons">
         <button onClick={chooseLeftACB} onMouseEnter={enterLeftACB} onMouseLeave={leaveLeftACB} className="button modalbutton">LEFT</button>
-        <button onMouseEnter={enterMiddleACB} onMouseLeave={leaveMiddleACB} className="button modalbutton">MIDDLE</button>
-        <button onMouseEnter={enterRightACB} onMouseLeave={leaveRightACB} className="button modalbutton">RIGHT</button>
+        <button onClick={chooseMiddleACB} onMouseEnter={enterMiddleACB} onMouseLeave={leaveMiddleACB} className="button modalbutton">MIDDLE</button>
+        <button onClick={chooseRightACB} onMouseEnter={enterRightACB} onMouseLeave={leaveRightACB} className="button modalbutton">RIGHT</button>
       </div>
   );
 }

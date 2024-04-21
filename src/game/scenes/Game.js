@@ -20,7 +20,8 @@ export class Game extends Scene {
       .text(300, 100, 
         "Attack:  " + this.game.config.initData.mcAttack + "\n" +
         "Defence: " + this.game.config.initData.mcDefence + "\n" +
-        "Dodge: " + this.game.config.initData.mcDodge*100 + "%" ,{
+        "Shield: " + this.game.config.initData.mcShield + "\n" +
+        "Dodge: " + this.game.config.initData.mcDodge*100 + "% | " + this.game.config.initData.mcDodgeTimer ,{
         fontFamily: "Arial Black",
         fontSize: 18,
         color: "#ffffff",
@@ -182,6 +183,70 @@ export class Game extends Scene {
     attackTimeline.play()
   }
 
+  doShieldAnimate(props){
+    const shieldTimeline = this.add.timeline([
+      {
+        at: 0,
+        run: () => {
+
+        }
+      },
+      {
+        at: 100,
+        run: () => {
+          this.mc.play("mcAnimationAttack")
+          this.mc.chain("mcAnimationIdle")
+        }
+      },
+      {
+        at: 500,
+        run: () => {
+
+        }
+      },
+      {
+        at: 900,
+        run: () => {
+          props.setCombatState(3)
+          }
+      },
+    ]);
+
+    shieldTimeline.play()
+  }
+
+  doDodgeAnimate(props){
+    const dodgeTimeline = this.add.timeline([
+      {
+        at: 0,
+        run: () => {
+
+        }
+      },
+      {
+        at: 100,
+        run: () => {
+          this.mc.play("enemy1AnimationDead")
+          this.mc.chain("mcAnimationIdle")
+        }
+      },
+      {
+        at: 500,
+        run: () => {
+
+        }
+      },
+      {
+        at: 900,
+        run: () => {
+          props.setCombatState(3)
+          }
+      },
+    ]);
+
+    dodgeTimeline.play()
+  }
+
   getAttackedAnimate(props){
     const responseTimeline = this.add.timeline([
         {
@@ -209,15 +274,29 @@ export class Game extends Scene {
     responseTimeline.play()
   }
 
-  updateScene(props){
+  updateSceneTurn(props){
+    this.stats.setText(
+      "Attack:  " + props.mcAttack + "\n" +
+      "Defence: " + props.mcDefence + "\n" +
+      "Shield: " + props.mcShield + "\n" +
+      "Dodge: " + props.mcDodge*100 + "% | " + props.mcDodgeTimer
+    )
+  }
+  
+  updateSceneRound(props){
     this.enemyBar.width = props.enemyHp*(146/props.enemyMaxHp)
     this.enemyBarText.setText(props.enemyHp + "/" + props.enemyMaxHp)
     this.enemyAttack.setText(props.enemyAttack)
     this.enemy.setTexture(props.enemyKey)
     this.enemy.play(props.enemyKey + "AnimationIdle")
     this.enemyName.setText(props.enemyName)
-    // this.stats
-    // this.round
+    this.round.setText(props.currentRound)
+    this.stats.setText(
+      "Attack:  " + props.mcAttack + "\n" +
+      "Defence: " + props.mcDefence + "\n" +
+      "Shield: " + props.mcShield + "\n" +
+      "Dodge: " + props.mcDodge*100 + "% | " + props.mcDodgeTimer
+    )
   }
 
   // changeScene() {

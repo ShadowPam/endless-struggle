@@ -70,7 +70,7 @@ export class Preloader extends Scene
               frameWidth: 32,
               frameHeight: 32,
               startFrame: 0,
-              endFrame: 2,
+              endFrame: 6,
               }
           });
         
@@ -143,7 +143,7 @@ export class Preloader extends Scene
           this.anims.create({
             key: "enemy3AnimationDead",
             frames: this.anims.generateFrameNumbers("enemy3", {
-              frames: [0,0,1,2,2],
+              frames: [0,0,1,2,3,4,5],
             }),
             frameRate: 3,
             repeat: 0,

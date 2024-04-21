@@ -12,11 +12,32 @@ const Game = observer(
 
     // if scene.scene.key == "game"
     function onAttackACB() {
-      props.model.setCombatState(1)
       props.model.declareActionIntent("attack")
+      props.model.setCombatState(1)
+    }
+
+    function onShieldACB() {
+      props.model.declareActionIntent("shield")
+      props.model.setCombatState(1)
+    }
+
+    function onDodgeACB() {
+      props.model.declareActionIntent("dodge")
+      props.model.setCombatState(1)
     }
 
     function onLeftACB() {
+      props.model.declareRewardIntent(0) // 0 = left
+      props.model.setCombatState(6)
+    }
+
+    function onMiddleACB() {
+      props.model.declareRewardIntent(1) // 1 = middle
+      props.model.setCombatState(6)
+    }
+
+    function onRightACB() {
+      props.model.declareRewardIntent(2) // 2 = right
       props.model.setCombatState(6)
     }
 
@@ -62,11 +83,12 @@ const Game = observer(
     useEffect(() => {
       const scene = phaserRef.current.scene
       if(scene != null){
-      // console.log(props.model.combatState)
+      console.log(props.model.combatState)
 
       // 0 - you can declare your action intent
       if(props.model.combatState == 0){
-        // maybe upate scene here
+        props.model.progressTurn()
+        scene.updateSceneTurn(props.model)
       }
 
       // 1 - you have made your choice and request a joke
@@ -76,8 +98,19 @@ const Game = observer(
 
       // 2 - you have gotten your joke and will perform your declared action
       if(props.model.combatState == 2){
-        props.model.doAttack()
-        scene.doAttackAnimate(props.model) // combatState is updated at the end of animation -> 3 || 4
+        if (props.model.actionIntent == "attack"){
+          console.log("dwa")
+          props.model.doAttack()
+          scene.doAttackAnimate(props.model) // combatState is updated at the end of animation -> 3 || 4
+        }
+        if (props.model.actionIntent == "shield"){
+          props.model.doShield()
+          scene.doShieldAnimate(props.model) // combatState is updated at the end of animation -> 3
+        }
+        if (props.model.actionIntent == "dodge"){
+          props.model.doDodge()
+          scene.doDodgeAnimate(props.model) // combatState is updated at the end of animation -> 3
+        }
       }
 
       // 3 - you have performed your action, now the enemy will attack
@@ -101,11 +134,13 @@ const Game = observer(
 
       // 6 - Reward has been chosen and the scene changes back and a new round is prepared
       if(props.model.combatState == 6){
+        props.model.collectReward()
         scene.showRewards(props.model.currentRewards, false)
         scene.changeToCombatScreen(props.model) // combatState is updated at the end of animation -> 0
         scene.changeScene()
         props.model.getEnemy()
-        scene.targetScene.updateScene(props.model)
+        props.model.progressRound()
+        scene.targetScene.updateSceneRound(props.model)
       }
     }
     }, [props.model.combatState]);
@@ -132,20 +167,23 @@ const Game = observer(
           mouseOnLeft={mouseOnLeftACB} mouseOffLeft={mouseOffLeftACB}
           mouseOnMiddle={mouseOnMiddleACB} mouseOffMiddle={mouseOffMiddleACB}
           mouseOnRight={mouseOnRightACB} mouseOffRight={mouseOffRightACB}
-          onLeft={onLeftACB}/>
+          onLeft={onLeftACB} onMiddle={onMiddleACB} onRight={onRightACB}/>
         </>
       );
     }
     else{
       const initData = {
-        mcName:props.model.mcName,mcMaxHp:props.model.mcMaxHp,mcHp:props.model.mcHp,mcAttack:props.model.mcAttack,mcDefence:props.model.mcDefence,mcDodge:props.model.mcDodge,
+        mcName:props.model.mcName,mcMaxHp:props.model.mcMaxHp,mcHp:props.model.mcHp,mcAttack:props.model.mcAttack,
+        mcShield:props.model.mcShield,mcDefence:props.model.mcDefence,mcDodge:props.model.mcDodge,mcDodgeTimer:props.model.mcDodgeTimer,
         enemyName:props.model.enemyName,enemyKey:props.model.enemyKey,enemyMaxHp:props.model.enemyMaxHp,enemyHp:props.model.enemyHp,enemyAttack:props.model.enemyAttack,
         currentRound:props.model.currentRound}
 
       return (
         <>
           <PhaserGame ref={phaserRef} initData={initData}/>
-          <GameView combatState={props.model.combatState} onAttack={onAttackACB} jokeStatus={showPromiseState(props.model.jokePromiseState)}/>
+          <GameView combatState={props.model.combatState}
+          onAttack={onAttackACB} onShield={onShieldACB} onDodge={onDodgeACB}
+          jokeStatus={showPromiseState(props.model.jokePromiseState)}/>
         </>
       );
     }

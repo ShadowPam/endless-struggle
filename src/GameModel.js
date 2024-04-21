@@ -10,8 +10,10 @@ const model = {
     mcMaxHp: 100,
     mcHp: 100,
     mcAttack: 100,
-    mcDefence: 0,
+    mcShield: 0,
+    mcDefence: 30,
     mcDodge: 0.3,
+    mcDodgeTimer: 0,
 
     enemyAlive: true,
     enemyName:"Some guy",
@@ -20,15 +22,26 @@ const model = {
     enemyHp: 100,
     enemyAttack: 20,
 
-    currentRound: 0,
+    currentRound: 1,
 
     jokePromiseState: {},
 
     combatState: 0,
     actionIntent: "",
+    rewardIntent: 0,
 
     currentRewards:[],
     currentEnemy:{},
+
+    progressTurn(){
+        if (this.mcDodgeTimer > 0){
+            this.mcDodgeTimer -= 1
+        }
+    },
+
+    progressRound(){
+        this.currentRound += 1
+    },
 
     getEnemy(){
         this.currentEnemy = this.sample(enemies,1)[0]
@@ -38,6 +51,15 @@ const model = {
         this.enemyMaxHp = this.currentEnemy.health
         this.enemyHp = this.enemyMaxHp
         this.enemyAttack = this.currentEnemy.attack
+    },
+
+    collectReward(){
+        const currentReward = this.currentRewards[this.rewardIntent]
+        if(currentReward.tier == "basic"){
+            this.mcAttack += currentReward.attack
+            this.mcDefence += currentReward.defence
+            this.mcDodge += currentReward.dodge
+        }
     },
 
     getBasicRewards(){
@@ -59,6 +81,10 @@ const model = {
         this.combatState = value;
     },
 
+    declareRewardIntent(choice){
+        this.rewardIntent = choice
+    },
+
     declareActionIntent(choice){
         this.actionIntent = choice
     },
@@ -70,17 +96,28 @@ const model = {
         }
     },
 
+    doShield(){
+        this.mcShield += this.mcDefence
+    },
+
+    doDodge(){
+        this.mcDodgeTimer = 2
+    },
+
     getJoke(categories,blacklist,safe){
         resolvePromise(joke(categories,blacklist,safe), this.jokePromiseState)
     },
 
     getAttacked(){
-        const dodgeRoll = Math.random();
+        let dodgeRoll = 2
+        if (this.mcDodgeTimer > 0){
+           dodgeRoll = Math.random();
+        }
         if (dodgeRoll > this.mcDodge){
-            this.mcDefence = this.mcDefence - this.enemyAttack;
-            if (this.mcDefence < 0){
-                this.mcHp = this.mcHp + this.mcDefence;
-                this.mcDefence = 0;
+            this.mcShield = this.mcShield - this.enemyAttack;
+            if (this.mcShield < 0){
+                this.mcHp = this.mcHp + this.mcShield;
+                this.mcShield = 0;
             }
             if (this.mcHp <= 0){
                 this.mcAlive = false;
