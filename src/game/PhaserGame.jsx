@@ -34,6 +34,12 @@ export const PhaserGame = forwardRef(function PhaserGame(
         if (ref !== null && ref !== undefined) {
           ref.current.scene = currentScene;
         }
+        // makes sure to run combatstate 0 on startup and reload after pause
+        // shouldRunStateZeroOnReady is set true when pausing.
+        if(props.model.shouldRunStateZeroOnReady){
+          props.model.setZeroOnReady(false)
+          props.model.setCombatState(0)
+        }
     });
 
     return () => {

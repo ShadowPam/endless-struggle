@@ -145,7 +145,7 @@ export class Preloader extends Scene
             frames: this.anims.generateFrameNumbers("enemy3", {
               frames: [0,0,1,2,3,4,5],
             }),
-            frameRate: 3,
+            frameRate: 6,
             repeat: 0,
           });
         

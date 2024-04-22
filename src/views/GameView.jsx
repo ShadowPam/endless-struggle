@@ -1,5 +1,6 @@
 export function GameView(props) {
   function GoToMenu() {
+    props.onMenu();
     window.location.hash = "#/menu";
   }
 

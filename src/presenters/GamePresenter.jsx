@@ -10,7 +10,13 @@ const Game = observer(
 
     const phaserRef = useRef();
 
-    // if scene.scene.key == "game"
+    function onMenuACB() {
+      const scene = phaserRef.current.scene
+      scene.game.pause()
+      props.model.loadStateSnapshot()
+      props.model.setZeroOnReady(true)
+    }
+
     function onAttackACB() {
       props.model.declareActionIntent("attack")
       props.model.setCombatState(1)
@@ -87,8 +93,11 @@ const Game = observer(
 
       // 0 - you can declare your action intent
       if(props.model.combatState == 0){
+        props.model.takeStateSnapshot()
         props.model.progressTurn()
+        props.model.getRewards()
         scene.updateSceneTurn(props.model)
+        console.log(props.model.mcHp)
       }
 
       // 1 - you have made your choice and request a joke
@@ -128,7 +137,6 @@ const Game = observer(
 
       // 5 - enemy died and you can now choose one of three rewards on screen.
       if(props.model.combatState == 5){
-        props.model.getBasicRewards()
         scene.showRewards(props.model.currentRewards, true)
       }
 
@@ -136,11 +144,16 @@ const Game = observer(
       if(props.model.combatState == 6){
         props.model.collectReward()
         scene.showRewards(props.model.currentRewards, false)
-        scene.changeToCombatScreen(props.model) // combatState is updated at the end of animation -> 0
-        scene.changeScene()
         props.model.getEnemy()
+        scene.targetScene.showEnemy(props.model)
+        scene.changeToCombatScreen(props.model) // combatState is updated at the end of animation -> 7
+        scene.changeScene()
+      }
+
+      if(props.model.combatState == 7){
         props.model.progressRound()
-        scene.targetScene.updateSceneRound(props.model)
+        scene.updateSceneRound(props.model) // maybe add animation
+        props.model.setCombatState(0)
       }
     }
     }, [props.model.combatState]);
@@ -177,13 +190,13 @@ const Game = observer(
         mcShield:props.model.mcShield,mcDefence:props.model.mcDefence,mcDodge:props.model.mcDodge,mcDodgeTimer:props.model.mcDodgeTimer,
         enemyName:props.model.enemyName,enemyKey:props.model.enemyKey,enemyMaxHp:props.model.enemyMaxHp,enemyHp:props.model.enemyHp,enemyAttack:props.model.enemyAttack,
         currentRound:props.model.currentRound}
-
+        // är det valid passa funktioner utan att göra en ACB, utan genom att skicka hela props.model
       return (
         <>
-          <PhaserGame ref={phaserRef} initData={initData}/>
+          <PhaserGame ref={phaserRef} initData={initData} model={props.model}/>
           <GameView combatState={props.model.combatState}
           onAttack={onAttackACB} onShield={onShieldACB} onDodge={onDodgeACB}
-          jokeStatus={showPromiseState(props.model.jokePromiseState)}/>
+          onMenu={onMenuACB} jokeStatus={showPromiseState(props.model.jokePromiseState)}/>
         </>
       );
     }

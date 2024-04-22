@@ -98,7 +98,7 @@ export class Modal extends Scene {
         this.targetCam.setScroll((1 - t) * this.defaultWidth, 0);
 
         if(progress==1){
-          props.setCombatState(0)
+          props.setCombatState(7)
         }
       }
     });

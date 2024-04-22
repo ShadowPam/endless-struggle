@@ -283,13 +283,16 @@ export class Game extends Scene {
     )
   }
   
-  updateSceneRound(props){
+  showEnemy(props){
     this.enemyBar.width = props.enemyHp*(146/props.enemyMaxHp)
     this.enemyBarText.setText(props.enemyHp + "/" + props.enemyMaxHp)
     this.enemyAttack.setText(props.enemyAttack)
     this.enemy.setTexture(props.enemyKey)
     this.enemy.play(props.enemyKey + "AnimationIdle")
     this.enemyName.setText(props.enemyName)
+  }
+
+  updateSceneRound(props){
     this.round.setText(props.currentRound)
     this.stats.setText(
       "Attack:  " + props.mcAttack + "\n" +
