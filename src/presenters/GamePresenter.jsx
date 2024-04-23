@@ -9,12 +9,12 @@ const Game = observer(
   function GameRender(props){
 
     const phaserRef = useRef();
+    props.model.initializeModel()
 
     function onMenuACB() {
-      const scene = phaserRef.current.scene
-      scene.game.pause()
       props.model.loadStateSnapshot()
       props.model.setZeroOnReady(true)
+      props.model.setCombatState(-1) // -1 = on another url
     }
 
     function onAttackACB() {
@@ -95,9 +95,7 @@ const Game = observer(
       if(props.model.combatState == 0){
         props.model.takeStateSnapshot()
         props.model.progressTurn()
-        props.model.getRewards()
         scene.updateSceneTurn(props.model)
-        console.log(props.model.mcHp)
       }
 
       // 1 - you have made your choice and request a joke
@@ -108,7 +106,6 @@ const Game = observer(
       // 2 - you have gotten your joke and will perform your declared action
       if(props.model.combatState == 2){
         if (props.model.actionIntent == "attack"){
-          console.log("dwa")
           props.model.doAttack()
           scene.doAttackAnimate(props.model) // combatState is updated at the end of animation -> 3 || 4
         }
@@ -131,6 +128,7 @@ const Game = observer(
       // 4 - you have performed your action and the enemy was defeated
       if(props.model.combatState == 4){
         // choose reward method
+        props.model.getRewards()
         scene.changeToRewardScreen(props.model) // combatState is updated at the end of animation -> 5
         scene.changeScene()
       }
@@ -152,6 +150,8 @@ const Game = observer(
 
       if(props.model.combatState == 7){
         props.model.progressRound()
+        props.model.setNewSeed()
+        props.model.setNewMcPRNG()
         scene.updateSceneRound(props.model) // maybe add animation
         props.model.setCombatState(0)
       }
@@ -190,7 +190,7 @@ const Game = observer(
         mcShield:props.model.mcShield,mcDefence:props.model.mcDefence,mcDodge:props.model.mcDodge,mcDodgeTimer:props.model.mcDodgeTimer,
         enemyName:props.model.enemyName,enemyKey:props.model.enemyKey,enemyMaxHp:props.model.enemyMaxHp,enemyHp:props.model.enemyHp,enemyAttack:props.model.enemyAttack,
         currentRound:props.model.currentRound}
-        // är det valid passa funktioner utan att göra en ACB, utan genom att skicka hela props.model
+        // är det valid passa funktioner utan att göra en ACB, och istället skicka hela props.model
       return (
         <>
           <PhaserGame ref={phaserRef} initData={initData} model={props.model}/>

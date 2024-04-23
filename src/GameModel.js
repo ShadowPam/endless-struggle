@@ -2,52 +2,88 @@ import { joke } from "./jokeSource";
 import { resolvePromise } from "./resolvePromise";
 import enemies from "./Enemies.js";
 import basicRewards from "./BasicRewards.js";
+import seedrandom from "seedrandom";
 
 const model = {
 
     mcAlive: true,
     mcName:"Player",
-    mcMaxHp: 100,
-    mcHp: 100,
-    mcAttack: 100,
-    mcShield: 0,
-    mcDefence: 30,
-    mcDodge: 0.01,
-    mcDodgeTimer: 0,
-    mcDodgeRoll: 2,
+    mcMaxHp: null,
+    mcHp: null,
+    mcAttack: null,
+    mcShield: null,
+    mcDefence: null,
+    mcDodge: null,
+    mcDodgeTimer: null,
+    mcDodgeRoll: null,
+    mcPRNG: {},
 
     enemyAlive: true,
-    enemyName:"Some guy",
-    enemyKey:"enemy1",
-    enemyMaxHp: 100,
-    enemyHp: 100,
-    enemyAttack: 20,
+    enemyName: null,
+    enemyKey: null,
+    enemyMaxHp: null,
+    enemyHp: null,
+    enemyAttack: null,
 
-    currentRound: 1,
+    currentRound: null,
 
     jokePromiseState: {},
 
     combatState: -1,
-    actionIntent: "",
-    rewardIntent: 0,
+    actionIntent: null,
+    rewardIntent: null,
 
     currentRewards:[],
     currentEnemy:{},
 
+    seed:null,
     stateSnapshot:{},
-    hasLoadedSnapshot: false,
     shouldRunStateZeroOnReady: true,
+    initialized: false,
+
+    initializeModel() {
+        if (!this.initialized) {
+            console.log("init")
+            this.mcMaxHp = 100
+            this.mcHp = 100
+            this.mcAttack = 100
+            this.mcShield = 0
+            this.mcDefence = 30
+            this.mcDodge = 0.01
+            this.mcDodgeTimer = 0
+            this.mcDodgeRoll = 2
+            this.currentRound = 1
+            this.shouldRunStateZeroOnReady = true
+
+            this.setNewSeed() // seed -1
+            this.getEnemy() // current enemy is always from the previous seed
+
+            this.setNewSeed() // start seed (0)
+            this.setNewMcPRNG()
+    
+            this.initialized = true
+        }
+    },
+
+    setNewMcPRNG(){
+        this.mcPRNG = seedrandom(this.seed, {state: true})
+    },
+
+    setNewSeed(){
+        this.seed = Math.random()
+    },
 
     setZeroOnReady(bool){
         this.shouldRunStateZeroOnReady = bool
     },
 
     progressTurn(){
-        if(!this.hasLoadedSnapshot){
-            this.mcdodgeRoll = 2
-            if (this.mcDodgeTimer > 0){
-                this.mcdodgeRoll = Math.random();
-            }
+        if (this.mcDodgeTimer > 0){
+            this.mcdodgeRoll = this.mcPRNG()
+            console.log(this.mcdodgeRoll)
+        }
+        else{
+            this.mcdodgeRoll = 2 // 2 -> guaranteed hit
         }
         if (this.mcDodgeTimer > 0){
             this.mcDodgeTimer -= 1
@@ -56,8 +92,6 @@ const model = {
 
     progressRound(){
         this.currentRound += 1
-        this.hasLoadedSnapshot = false
-        this.currentRewards = []
     },
 
     getEnemy(){
@@ -80,20 +114,20 @@ const model = {
     },
     
     getRewards(){
-        if(this.currentRewards.length == 0){ // !hasLoadedSnapshot equivalent
-            this.currentRewards = this.sample(basicRewards,3)
-        }
+        this.currentRewards = this.sample(basicRewards,3)
     },
     
     sample(arr,nr) {
+        const array = [...arr]
+        const random = seedrandom(this.seed)
         var j, x, index;
-        for (index = arr.length - 1; index > 0; index--) {
-            j = Math.floor(Math.random() * (index + 1));
-            x = arr[index];
-            arr[index] = arr[j];
-            arr[j] = x;
+        for (index = array.length - 1; index > 0; index--) {
+            j = Math.floor(random() * (index + 1));
+            x = array[index];
+            array[index] = array[j];
+            array[j] = x;
         }
-        return arr.slice(0, nr);
+        return array.slice(0, nr);
     },
     
     setCombatState(value){
@@ -121,6 +155,8 @@ const model = {
     
     doDodge(){
         this.mcDodgeTimer = 2
+        this.mcdodgeRoll = this.mcPRNG()
+        console.log(this.mcdodgeRoll)
     },
     
     getJoke(categories,blacklist,safe){
@@ -142,6 +178,7 @@ const model = {
     },
     
     takeStateSnapshot(){
+        console.log("snap")
         this.stateSnapshot.mcAlive = this.mcAlive
         this.stateSnapshot.mcMaxHp = this.mcMaxHp
         this.stateSnapshot.mcHp = this.mcHp
@@ -157,6 +194,8 @@ const model = {
         this.stateSnapshot.enemyMaxHp = this.enemyMaxHp
         this.stateSnapshot.enemyHp = this.enemyHp
         this.stateSnapshot.enemyAttack = this.enemyAttack
+
+        // this.stateSnapshot.mcPRNG = this.mcPRNG.state()
     },
     
     loadStateSnapshot(){
@@ -175,9 +214,8 @@ const model = {
         this.enemyMaxHp = this.stateSnapshot.enemyMaxHp
         this.enemyHp = this.stateSnapshot.enemyHp
         this.enemyAttack = this.stateSnapshot.enemyAttack
-        this.hasLoadedSnapshot = true
+        this.mcPRNG = seedrandom(this.seed, {"": this.stateSnapshot.mcPRNG})
     },
-    
 };
 
 export { model };

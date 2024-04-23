@@ -12,6 +12,7 @@ export const PhaserGame = forwardRef(function PhaserGame(
   // Create the game inside a useLayoutEffect hook to avoid the game being created outside the DOM
   useLayoutEffect(() => {
     if (game.current === undefined) {
+
       game.current = StartGame("game-container");
 
       // data used to create scene on startup/reload
