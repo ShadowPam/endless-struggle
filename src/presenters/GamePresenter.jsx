@@ -94,7 +94,10 @@ const Game = observer(
       // 0 - you can declare your action intent
       if(props.model.combatState == 0){
         props.model.takeStateSnapshot()
-        props.model.progressTurn()
+        props.model.progressDodgeTimer()
+        props.model.setMcDamage()
+        props.model.setEnemyDamage()
+        // randomize enemy attack
         scene.updateSceneTurn(props.model)
       }
 
@@ -138,21 +141,22 @@ const Game = observer(
         scene.showRewards(props.model.currentRewards, true)
       }
 
-      // 6 - Reward has been chosen and the scene changes back and a new round is prepared
+      // 6 - Reward has been chosen and the scene changes
       if(props.model.combatState == 6){
         props.model.collectReward()
         scene.showRewards(props.model.currentRewards, false)
         props.model.getEnemy()
-        scene.targetScene.showEnemy(props.model)
+        scene.targetScene.showNewEnemy(props.model)
         scene.changeToCombatScreen(props.model) // combatState is updated at the end of animation -> 7
         scene.changeScene()
       }
 
+      // 7 - a new round is prepared
       if(props.model.combatState == 7){
         props.model.progressRound()
         props.model.setNewSeed()
-        props.model.setNewMcPRNG()
-        scene.updateSceneRound(props.model) // maybe add animation
+        props.model.setNewPRNGs()
+        scene.updateSceneRound(props.model) // things that happen once per round
         props.model.setCombatState(0)
       }
     }
@@ -185,10 +189,12 @@ const Game = observer(
       );
     }
     else{
+      // kan nog trimmas ned
       const initData = {
-        mcName:props.model.mcName,mcMaxHp:props.model.mcMaxHp,mcHp:props.model.mcHp,mcAttack:props.model.mcAttack,
+        mcName:props.model.mcName,mcMaxHp:props.model.mcMaxHp,mcHp:props.model.mcHp,mcAttack:props.model.mcAttack,mcDamage:props.model.mcDamage,
         mcShield:props.model.mcShield,mcDefence:props.model.mcDefence,mcDodge:props.model.mcDodge,mcDodgeTimer:props.model.mcDodgeTimer,
-        enemyName:props.model.enemyName,enemyKey:props.model.enemyKey,enemyMaxHp:props.model.enemyMaxHp,enemyHp:props.model.enemyHp,enemyAttack:props.model.enemyAttack,
+        enemyName:props.model.enemyName,enemyKey:props.model.enemyKey,enemyMaxHp:props.model.enemyMaxHp,
+        enemyHp:props.model.enemyHp,enemyDamage:props.model.enemyDamage,enemyAttack:props.model.enemyAttack,enemyDamageSpread:props.model.enemyDamageSpread,
         currentRound:props.model.currentRound}
         // är det valid passa funktioner utan att göra en ACB, och istället skicka hela props.model
       return (

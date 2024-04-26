@@ -1,7 +1,7 @@
 const enemies = 
 [
-    {key:"enemy1",name:"Some guy",health:100,attack:20},
-    {key:"enemy2",name:"Grass slime",health:150,attack:10},
-    {key:"enemy3",name:"Thick Toad",health:130,attack:15},
+    {key:"enemy1",name:"Some guy",health:30,attack:6},
+    {key:"enemy2",name:"Grass slime",health:45,attack:3},
+    {key:"enemy3",name:"Thick Toad",health:40,attack:4},
 ];
 export default enemies

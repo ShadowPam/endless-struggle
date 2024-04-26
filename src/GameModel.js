@@ -10,6 +10,7 @@ const model = {
     mcName:"Player",
     mcMaxHp: null,
     mcHp: null,
+    mcDamage: null,
     mcAttack: null,
     mcShield: null,
     mcDefence: null,
@@ -23,7 +24,10 @@ const model = {
     enemyKey: null,
     enemyMaxHp: null,
     enemyHp: null,
+    enemyDamage: null,
     enemyAttack: null,
+    enemyDamageSpread: null,
+    enemyPRNG: {},
 
     currentRound: null,
 
@@ -44,14 +48,16 @@ const model = {
     initializeModel() {
         if (!this.initialized) {
             console.log("init")
-            this.mcMaxHp = 100
-            this.mcHp = 100
-            this.mcAttack = 100
+            this.mcMaxHp = 50
+            this.mcHp = 50
+            this.mcAttack = 10
+            this.mcDamage = this.mcAttack
             this.mcShield = 0
-            this.mcDefence = 30
-            this.mcDodge = 0.01
+            this.mcDefence = 2
+            this.mcDodge = 0.15
             this.mcDodgeTimer = 0
             this.mcDodgeRoll = 2
+            this.enemyDamageSpread = 0.6,
             this.currentRound = 1
             this.shouldRunStateZeroOnReady = true
 
@@ -59,14 +65,30 @@ const model = {
             this.getEnemy() // current enemy is always from the previous seed
 
             this.setNewSeed() // start seed (0)
-            this.setNewMcPRNG()
+            this.setNewPRNGs()
     
             this.initialized = true
         }
     },
 
-    setNewMcPRNG(){
+    setMcDamage(){
+        if(this.mcShield === 0){
+            console.log("does not has shield")
+            this.mcDamage = this.mcAttack
+        }
+        else{
+            console.log("has shield")
+            this.mcDamage = this.mcAttack*2
+        }
+    },
+
+    setEnemyDamage(){
+        this.enemyDamage = this.enemyAttack + Math.round(this.enemyDamageSpread * 2 * this.enemyAttack * (this.enemyPRNG() - 0.5))
+    },
+
+    setNewPRNGs(){
         this.mcPRNG = seedrandom(this.seed, {state: true})
+        this.enemyPRNG = seedrandom((this.seed + 1), {state: true})
     },
 
     setNewSeed(){
@@ -77,7 +99,7 @@ const model = {
         this.shouldRunStateZeroOnReady = bool
     },
 
-    progressTurn(){
+    progressDodgeTimer(){
         if (this.mcDodgeTimer > 0){
             this.mcdodgeRoll = this.mcPRNG()
             console.log(this.mcdodgeRoll)
@@ -94,7 +116,7 @@ const model = {
         this.currentRound += 1
     },
 
-    getEnemy(){
+    getEnemy(){ //enemy scaling would be implemented here
         this.currentEnemy = this.sample(enemies,1)[0]
         this.enemyAlive = true
         this.enemyName = this.currentEnemy.name
@@ -102,6 +124,7 @@ const model = {
         this.enemyMaxHp = this.currentEnemy.health
         this.enemyHp = this.enemyMaxHp
         this.enemyAttack = this.currentEnemy.attack
+        this.enemyDamage = this.enemyAttack
     },
 
     collectReward(){
@@ -119,7 +142,7 @@ const model = {
     
     sample(arr,nr) {
         const array = [...arr]
-        const random = seedrandom(this.seed)
+        const random = seedrandom(this.seed + 2)
         var j, x, index;
         for (index = array.length - 1; index > 0; index--) {
             j = Math.floor(random() * (index + 1));
@@ -143,7 +166,7 @@ const model = {
     },
     
     doAttack(){
-        this.enemyHp = this.enemyHp - this.mcAttack;
+        this.enemyHp = this.enemyHp - this.mcDamage;
         if (this.enemyHp <= 0){
             this.enemyAlive = false;
         }
@@ -166,7 +189,7 @@ const model = {
     getAttacked(){
 
         if (this.mcDodgeRoll > this.mcDodge){
-            this.mcShield = this.mcShield - this.enemyAttack;
+            this.mcShield = this.mcShield - this.enemyDamage;
             if (this.mcShield < 0){
                 this.mcHp = this.mcHp + this.mcShield;
                 this.mcShield = 0;
@@ -183,6 +206,7 @@ const model = {
         this.stateSnapshot.mcMaxHp = this.mcMaxHp
         this.stateSnapshot.mcHp = this.mcHp
         this.stateSnapshot.mcAttack = this.mcAttack
+        this.stateSnapshot.mcDamage = this.mcDamage
         this.stateSnapshot.mcShield = this.mcShield
         this.stateSnapshot.mcDefence = this.mcDefence
         this.stateSnapshot.mcDodge = this.mcDodge
@@ -194,8 +218,10 @@ const model = {
         this.stateSnapshot.enemyMaxHp = this.enemyMaxHp
         this.stateSnapshot.enemyHp = this.enemyHp
         this.stateSnapshot.enemyAttack = this.enemyAttack
+        this.stateSnapshot.enemyDamage = this.enemyDamage
 
         // this.stateSnapshot.mcPRNG = this.mcPRNG.state()
+        // this.stateSnapshot.enemyPRNG = this.enemyPRNG.state()
     },
     
     loadStateSnapshot(){
@@ -203,6 +229,7 @@ const model = {
         this.mcMaxHp = this.stateSnapshot.mcMaxHp
         this.mcHp = this.stateSnapshot.mcHp
         this.mcAttack = this.stateSnapshot.mcAttack
+        this.mcDamage = this.stateSnapshot.mcDamage
         this.mcShield = this.stateSnapshot.mcShield
         this.mcDefence = this.stateSnapshot.mcDefence
         this.mcDodge = this.stateSnapshot.mcDodge
@@ -214,7 +241,9 @@ const model = {
         this.enemyMaxHp = this.stateSnapshot.enemyMaxHp
         this.enemyHp = this.stateSnapshot.enemyHp
         this.enemyAttack = this.stateSnapshot.enemyAttack
+        this.enemyDamage = this.stateSnapshot.enemyDamage
         this.mcPRNG = seedrandom(this.seed, {"": this.stateSnapshot.mcPRNG})
+        this.enemyPRNG = seedrandom(this.seed, {"": this.stateSnapshot.enemyPRNG})
     },
 };
 

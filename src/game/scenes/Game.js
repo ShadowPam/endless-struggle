@@ -19,6 +19,7 @@ export class Game extends Scene {
     this.stats = this.add
       .text(300, 100, 
         "Attack:  " + this.game.config.initData.mcAttack + "\n" +
+        "Damage:  " + this.game.config.initData.mcDamage + "\n" +
         "Defence: " + this.game.config.initData.mcDefence + "\n" +
         "Shield: " + this.game.config.initData.mcShield + "\n" +
         "Dodge: " + this.game.config.initData.mcDodge*100 + "% | " + this.game.config.initData.mcDodgeTimer ,{
@@ -74,8 +75,10 @@ export class Game extends Scene {
       .setOrigin(0.5);
 
     // ENEMY CREATION
-    this.enemyAttack = this.add
-      .text(1420, 500, this.game.config.initData.enemyAttack, {
+    this.enemyDamagePotential = this.add
+      .text(1420, 500, 
+        (this.game.config.initData.enemyAttack - Math.round(this.game.config.initData.enemyAttack*this.game.config.initData.enemyDamageSpread))
+        + " - " + (this.game.config.initData.enemyAttack + Math.round(this.game.config.initData.enemyAttack*this.game.config.initData.enemyDamageSpread)), {
         fontFamily: "Arial Black",
         fontSize: 18,
         color: "#ffffff",
@@ -276,30 +279,29 @@ export class Game extends Scene {
 
   updateSceneTurn(props){
     this.stats.setText(
+      "EAttack:  " + props.enemyAttack + "\n" +
+      "EDamage:  " + props.enemyDamage + "\n" +
       "Attack:  " + props.mcAttack + "\n" +
+      "Damage:  " + props.mcDamage + "\n" +
       "Defence: " + props.mcDefence + "\n" +
       "Shield: " + props.mcShield + "\n" +
-      "Dodge: " + props.mcDodge*100 + "% | " + props.mcDodgeTimer
+      "Dodge: " + Math.round(props.mcDodge*100) + "% | " + props.mcDodgeTimer
     )
+    // this.enemyAttack.setText(props.enemyDamage)
   }
   
-  showEnemy(props){
+  showNewEnemy(props){
     this.enemyBar.width = props.enemyHp*(146/props.enemyMaxHp)
     this.enemyBarText.setText(props.enemyHp + "/" + props.enemyMaxHp)
-    this.enemyAttack.setText(props.enemyAttack)
     this.enemy.setTexture(props.enemyKey)
     this.enemy.play(props.enemyKey + "AnimationIdle")
     this.enemyName.setText(props.enemyName)
+    this.enemyDamagePotential.setText((props.enemyAttack - Math.round(props.enemyAttack*props.enemyDamageSpread))
+    + " - " + (props.enemyAttack + Math.round(props.enemyAttack*props.enemyDamageSpread)))
   }
 
   updateSceneRound(props){
     this.round.setText(props.currentRound)
-    this.stats.setText(
-      "Attack:  " + props.mcAttack + "\n" +
-      "Defence: " + props.mcDefence + "\n" +
-      "Shield: " + props.mcShield + "\n" +
-      "Dodge: " + props.mcDodge*100 + "% | " + props.mcDodgeTimer
-    )
   }
 
   // changeScene() {
