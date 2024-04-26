@@ -270,7 +270,16 @@ export class Game extends Scene {
           at: 3200,
           run: () => {
             this.enemyJoke.setVisible(false)
-            props.setCombatState(0)
+            if (props.mcAlive) {
+              props.setCombatState(0)
+            }
+            else{
+              this.mc.play("enemy1AnimationDead")
+              this.mc.once('animationcomplete', ()=>{ 
+                props.setCombatState(-1)
+                window.location.hash = "#/gameover";
+              })
+            }
           }
         },
       ]);

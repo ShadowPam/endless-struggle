@@ -125,7 +125,8 @@ const Game = observer(
       // 3 - you have performed your action, now the enemy will attack
       if(props.model.combatState == 3){
         props.model.getAttacked()
-        scene.getAttackedAnimate(props.model) // combatState is updated at the end of animation -> 0 (senare till game over)
+        console.log(props.model.mcHp)
+        scene.getAttackedAnimate(props.model) // combatState is updated at the end of animation -> 0 || -1
       }
 
       // 4 - you have performed your action and the enemy was defeated

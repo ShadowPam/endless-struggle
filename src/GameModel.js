@@ -71,13 +71,51 @@ const model = {
         }
     },
 
+    resetModel(){
+        this.mcAlive = true
+        this.mcMaxHp = null
+        this.mcHp = null
+        this.mcDamage = null
+        this.mcAttack = null
+        this.mcShield = null
+        this.mcDefence = null
+        this.mcDodge = null
+        this.mcDodgeTimer = null
+        this.mcDodgeRoll = null
+        this.mcPRNG = {}
+
+        this.enemyAlive = true
+        this.enemyName = null
+        this.enemyKey = null
+        this.enemyMaxHp = null
+        this.enemyHp = null
+        this.enemyDamage = null
+        this.enemyAttack = null
+        this.enemyDamageSpread = null
+        this.enemyPRNG = {}
+
+        this.currentRound = null
+
+        this.jokePromiseState = {}
+
+        this.combatState = -1
+        this.actionIntent = null
+        this.rewardIntent = null
+
+        this.currentRewards = []
+        this.currentEnemy = {}
+
+        this.seed = null
+        this.stateSnapshot = {}
+        this.shouldRunStateZeroOnReady = true
+        this.initialized = false
+    },
+
     setMcDamage(){
         if(this.mcShield === 0){
-            console.log("does not has shield")
             this.mcDamage = this.mcAttack
         }
         else{
-            console.log("has shield")
             this.mcDamage = this.mcAttack*2
         }
     },
@@ -168,6 +206,7 @@ const model = {
     doAttack(){
         this.enemyHp = this.enemyHp - this.mcDamage;
         if (this.enemyHp <= 0){
+            this.enemyHp = 0
             this.enemyAlive = false;
         }
     },
@@ -195,6 +234,8 @@ const model = {
                 this.mcShield = 0;
             }
             if (this.mcHp <= 0){
+                this.mcHp = 0
+                console.log(this.mcHp)
                 this.mcAlive = false;
             }
         }
