@@ -76,9 +76,12 @@ export class Preloader extends Scene
         
         this.load.image('background', 'background.png');
         this.load.image('ModalBackground', 'ModalBackground.png');
-        this.load.image('AttackIcon', 'AttackIconScaled.png');
-        this.load.image('ShieldIcon', 'ShieldIconScaled.png');
-        this.load.image('DodgeIcon', 'DodgeIconScaled.png');
+        this.load.image('AttackIcon', 'AttackIcon.png');
+        this.load.image('AttackIconScaled', 'AttackIconScaled.png');
+        this.load.image('ShieldIcon', 'ShieldIcon.png');
+        this.load.image('ShieldIconScaled', 'ShieldIconScaled.png');
+        this.load.image('DodgeIcon', 'DodgeIcon.png');
+        this.load.image('DodgeIconScaled', 'DodgeIconScaled.png');
     }
 
     create ()

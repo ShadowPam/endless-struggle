@@ -14,6 +14,7 @@ const model = {
     mcAttack: null,
     mcShield: null,
     mcDefence: null,
+    mcConfidence: null,
     mcDodge: null,
     mcDodgeTimer: null,
     mcDodgeRoll: null,
@@ -47,12 +48,12 @@ const model = {
 
     initializeModel() {
         if (!this.initialized) {
-            console.log("init")
             this.mcMaxHp = 50
             this.mcHp = 50
             this.mcAttack = 10
             this.mcDamage = this.mcAttack
             this.mcShield = 0
+            this.mcConfidence = false
             this.mcDefence = 2
             this.mcDodge = 0.15
             this.mcDodgeTimer = 0
@@ -114,9 +115,11 @@ const model = {
     setMcDamage(){
         if(this.mcShield === 0){
             this.mcDamage = this.mcAttack
+            this.mcConfidence = false
         }
         else{
             this.mcDamage = this.mcAttack*2
+            this.mcConfidence = true
         }
     },
 
@@ -139,11 +142,10 @@ const model = {
 
     progressDodgeTimer(){
         if (this.mcDodgeTimer > 0){
-            this.mcdodgeRoll = this.mcPRNG()
-            console.log(this.mcdodgeRoll)
+            this.mcDodgeRoll = this.mcPRNG()
         }
         else{
-            this.mcdodgeRoll = 2 // 2 -> guaranteed hit
+            this.mcDodgeRoll = 2 // 2 -> guaranteed hit
         }
         if (this.mcDodgeTimer > 0){
             this.mcDodgeTimer -= 1
@@ -217,8 +219,7 @@ const model = {
     
     doDodge(){
         this.mcDodgeTimer = 2
-        this.mcdodgeRoll = this.mcPRNG()
-        console.log(this.mcdodgeRoll)
+        this.mcDodgeRoll = this.mcPRNG()
     },
     
     getJoke(categories,blacklist,safe){
@@ -235,14 +236,12 @@ const model = {
             }
             if (this.mcHp <= 0){
                 this.mcHp = 0
-                console.log(this.mcHp)
                 this.mcAlive = false;
             }
         }
     },
     
     takeStateSnapshot(){
-        console.log("snap")
         this.stateSnapshot.mcAlive = this.mcAlive
         this.stateSnapshot.mcMaxHp = this.mcMaxHp
         this.stateSnapshot.mcHp = this.mcHp
@@ -250,6 +249,7 @@ const model = {
         this.stateSnapshot.mcDamage = this.mcDamage
         this.stateSnapshot.mcShield = this.mcShield
         this.stateSnapshot.mcDefence = this.mcDefence
+        this.stateSnapshot.mcConfidence = this.mcConfidence
         this.stateSnapshot.mcDodge = this.mcDodge
         this.stateSnapshot.mcDodgeTimer = this.mcDodgeTimer
         this.stateSnapshot.mcDodgeRoll = this.mcDodgeRoll
@@ -273,6 +273,7 @@ const model = {
         this.mcDamage = this.stateSnapshot.mcDamage
         this.mcShield = this.stateSnapshot.mcShield
         this.mcDefence = this.stateSnapshot.mcDefence
+        this.mcConfidence = this.stateSnapshot.mcConfidence
         this.mcDodge = this.stateSnapshot.mcDodge
         this.mcDodgeTimer = this.stateSnapshot.mcDodgeTimer
         this.mcDodgeRoll = this.stateSnapshot.mcDodgeRoll

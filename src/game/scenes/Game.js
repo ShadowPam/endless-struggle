@@ -16,25 +16,39 @@ export class Game extends Scene {
     this.bg = this.add.image(960, 330, "background");
     this.bg.setAlpha(1);
 
+    this.statsBg = this.add.rectangle(110, 50, 220, 100, 0x000000, 0.4);
+
     this.stats = this.add
-      .text(300, 100, 
-        "Attack:  " + this.game.config.initData.mcAttack + "\n" +
-        "Damage:  " + this.game.config.initData.mcDamage + "\n" +
-        "Defence: " + this.game.config.initData.mcDefence + "\n" +
-        "Shield: " + this.game.config.initData.mcShield + "\n" +
-        "Dodge: " + this.game.config.initData.mcDodge*100 + "% | " + this.game.config.initData.mcDodgeTimer ,{
-        fontFamily: "Arial Black",
+      .text(135, 5, 
+        this.game.config.initData.mcAttack + "\n" +
+        this.game.config.initData.mcDefence + "\n" +
+        this.game.config.initData.mcDodge*100 + "%",{
+        fontFamily: "Marcellus",
         fontSize: 18,
         color: "#ffffff",
         stroke: "#000000",
         strokeThickness: 4,
         align: "left",
       })
-      .setOrigin(0.5);
+      .setOrigin(0,0);
 
-    this.round = this.add
-      .text(1620, 100, this.game.config.initData.currentRound, {
-        fontFamily: "Arial Black",
+    this.statsText = this.add
+      .text(5, 5, 
+        "Attack:  " + "\n" +
+        "Defence: " + "\n" +
+        "Dodge Chance: ",{
+        fontFamily: "Marcellus",
+        fontSize: 18,
+        color: "#ffffff",
+        stroke: "#000000",
+        strokeThickness: 4,
+        align: "left",
+      })
+      .setOrigin(0,0);
+    
+      this.roundText = this.add
+      .text(960, 160, "ROUND", {
+        fontFamily: "Marcellus",
         fontSize: 18,
         color: "#ffffff",
         stroke: "#000000",
@@ -43,10 +57,21 @@ export class Game extends Scene {
       })
       .setOrigin(0.5);
 
+    this.round = this.add
+      .text(960, 120, this.game.config.initData.currentRound, {
+        fontFamily: "Marcellus",
+        fontSize: 50,
+        color: "#ffffff",
+        stroke: "#000000",
+        strokeThickness: 6,
+        align: "center",
+      })
+      .setOrigin(0.5);
+
     // MC CREATION
     this.add
       .text(445, 500, this.game.config.initData.mcName, {
-        fontFamily: "Arial Black",
+        fontFamily: "Marcellus",
         fontSize: 18,
         color: "#ffffff",
         stroke: "#000000",
@@ -58,6 +83,7 @@ export class Game extends Scene {
     this.mc = this.add.sprite(450, 600)
     this.mc.scale = 5;
     this.mc.play("mcAnimationIdle")
+    this.mc.setDepth(1)
 
     this.add.rectangle(450, 700, 150, 20).setStrokeStyle(4, 0x000000);
     this.mcBar = this.add.rectangle(450 - 150 / 2 + 2, 700, 0, 16, 0xff0000);
@@ -65,8 +91,8 @@ export class Game extends Scene {
 
     this.mcBarText = this.add
       .text(450, 700, this.game.config.initData.mcHp + "/" + this.game.config.initData.mcMaxHp, {
-        fontFamily: "Arial Black",
-        fontSize: 14,
+        fontFamily: "Marcellus",
+        fontSize: 16,
         color: "#ffffff",
         stroke: "#000000",
         strokeThickness: 4,
@@ -74,16 +100,55 @@ export class Game extends Scene {
       })
       .setOrigin(0.5);
 
+    this.mcDamageIndicatorImage = this.add.image(565, 565, "AttackIcon")
+    this.mcDamageIndicatorImage.scale = 1.2
+    this.mcDamageIndicatorText = this.add
+      .text(548, 565, this.game.config.initData.mcDamage, {
+        fontFamily: "Marcellus",
+        fontSize: 25,
+        color: "#ffffff",
+        stroke: "#3d0700",
+        strokeThickness: 6,
+        align: "left",
+      })
+      .setOrigin(1, 0.5);
+
+      this.mcShieldIndicatorImage = this.add.image(565, 610, "ShieldIcon")
+      this.mcShieldIndicatorImage.scale = 1.2
+      this.mcShieldIndicatorText = this.add
+        .text(548, 610, this.game.config.initData.mcShield, {
+          fontFamily: "Marcellus",
+          fontSize: 25,
+          color: "#ffffff",
+          stroke: "#00353d",
+          strokeThickness: 6,
+          align: "left",
+        })
+        .setOrigin(1, 0.5);
+
+      this.mcDodgeIndicatorImage = this.add.image(565, 655, "DodgeIcon")
+      this.mcDodgeIndicatorImage.scale = 1.2
+      this.mcDodgeIndicatorText = this.add
+        .text(548, 655, this.game.config.initData.mcDodgeTimer, {
+          fontFamily: "Marcellus",
+          fontSize: 25,
+          color: "#ffffff",
+          stroke: "#093d00",
+          strokeThickness: 6,
+          align: "center",
+        })
+        .setOrigin(1, 0.5);
+
     // ENEMY CREATION
     this.enemyDamagePotential = this.add
-      .text(1420, 500, 
+      .text(1470, 500, 
         (this.game.config.initData.enemyAttack - Math.round(this.game.config.initData.enemyAttack*this.game.config.initData.enemyDamageSpread))
         + " - " + (this.game.config.initData.enemyAttack + Math.round(this.game.config.initData.enemyAttack*this.game.config.initData.enemyDamageSpread)), {
-        fontFamily: "Arial Black",
-        fontSize: 18,
+        fontFamily: "Marcellus",
+        fontSize: 25,
         color: "#ffffff",
-        stroke: "#000000",
-        strokeThickness: 4,
+        stroke: "#3d0700",
+        strokeThickness: 6,
         align: "center",
       })
       .setOrigin(0.5);
@@ -95,8 +160,8 @@ export class Game extends Scene {
 
     this.enemyName = this.add
       .text(1470, 695, this.game.config.initData.enemyName, {
-        fontFamily: "Arial Black",
-        fontSize: 18,
+        fontFamily: "Marcellus",
+        fontSize: 20,
         color: "#ffffff",
         stroke: "#000000",
         strokeThickness: 4,
@@ -110,8 +175,8 @@ export class Game extends Scene {
 
     this.enemyBarText = this.add
       .text(1470, 725, this.game.config.initData.enemyHp + "/" + this.game.config.initData.enemyMaxHp, {
-        fontFamily: "Arial Black",
-        fontSize: 14,
+        fontFamily: "Marcellus",
+        fontSize: 16,
         color: "#ffffff",
         stroke: "#000000",
         strokeThickness: 4,
@@ -119,6 +184,20 @@ export class Game extends Scene {
       })
       .setOrigin(0.5);
 
+    this.enemyDamageIndicatorImage = this.add.image(1325, 565, "AttackIcon")
+    this.enemyDamageIndicatorImage.scale = 1.2
+    this.enemyDamageIndicatorImage.flipX=true
+    this.enemyDamageIndicatorText = this.add
+      .text(1342, 565, this.game.config.initData.enemyDamage, {
+        fontFamily: "Marcellus",
+        fontSize: 25,
+        color: "#ffffff",
+        stroke: "#3d0700",
+        strokeThickness: 6,
+        align: "right",
+      })
+      .setOrigin(0, 0.5);
+    
     this.enemyJoke = this.add.text(1000, 600, "").setVisible(false)
     this.enemyJoke.setTint(0xFFFFFF);
     
@@ -204,7 +283,7 @@ export class Game extends Scene {
       {
         at: 500,
         run: () => {
-
+          this.mcShieldIndicatorText.setText(props.mcShield)
         }
       },
       {
@@ -236,7 +315,7 @@ export class Game extends Scene {
       {
         at: 500,
         run: () => {
-
+          this.mcDodgeIndicatorText.setText(props.mcDodgeTimer)
         }
       },
       {
@@ -264,6 +343,7 @@ export class Game extends Scene {
           run: () => {
             this.mcBar.width = props.mcHp*(146/props.mcMaxHp)
             this.mcBarText.setText(props.mcHp + "/" + props.mcMaxHp)
+            this.mcShieldIndicatorText.setText(props.mcShield)
           }
         },
         {
@@ -288,15 +368,29 @@ export class Game extends Scene {
 
   updateSceneTurn(props){
     this.stats.setText(
-      "EAttack:  " + props.enemyAttack + "\n" +
-      "EDamage:  " + props.enemyDamage + "\n" +
-      "Attack:  " + props.mcAttack + "\n" +
-      "Damage:  " + props.mcDamage + "\n" +
-      "Defence: " + props.mcDefence + "\n" +
-      "Shield: " + props.mcShield + "\n" +
-      "Dodge: " + Math.round(props.mcDodge*100) + "% | " + props.mcDodgeTimer
+      props.mcAttack + "\n" +
+      props.mcDefence + "\n" +
+      Math.round(props.mcDodge*100) + "%"
     )
-    // this.enemyAttack.setText(props.enemyDamage)
+    this.enemyDamageIndicatorText.setVisible(true)
+    this.enemyDamageIndicatorImage.setVisible(true)
+    this.enemyDamageIndicatorText.setText(props.enemyDamage)
+    this.mcDamageIndicatorText.setText(props.mcDamage)
+    this.mcShieldIndicatorText.setText(props.mcShield)
+    this.mcDodgeIndicatorText.setText(props.mcDodgeTimer)
+
+    if(props.mcConfidence){
+      this.mcDamageIndicatorImage.scale = 1.5
+      this.mcDamageIndicatorText.scale = 1.18
+      this.mcDamageIndicatorText.setColor("#ffff9a")
+      this.mcDamageIndicatorImage.setTint(0xffffff, 0xffff00, 0xffffff, 0xffffff)
+    }
+    else{
+      this.mcDamageIndicatorImage.scale = 1.2
+      this.mcDamageIndicatorText.scale = 1
+      this.mcDamageIndicatorText.setColor("#ffffff")
+      this.mcDamageIndicatorImage.setTint(0xffffff, 0xffffff, 0xffffff, 0xffffff)
+    }
   }
   
   showNewEnemy(props){
@@ -307,6 +401,8 @@ export class Game extends Scene {
     this.enemyName.setText(props.enemyName)
     this.enemyDamagePotential.setText((props.enemyAttack - Math.round(props.enemyAttack*props.enemyDamageSpread))
     + " - " + (props.enemyAttack + Math.round(props.enemyAttack*props.enemyDamageSpread)))
+    this.enemyDamageIndicatorText.setVisible(false)
+    this.enemyDamageIndicatorImage.setVisible(false)
   }
 
   updateSceneRound(props){
