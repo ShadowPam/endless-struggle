@@ -103,6 +103,20 @@ export class Preloader extends Scene
           });
 
         this.anims.create({
+            key: "mcAnimationDead",
+            frames: this.anims.generateFrameNumbers("mc", { frames: [56,57,58,59,60,61,62,63] }),
+            frameRate: 3,
+            repeat: 0,
+          });
+
+        this.anims.create({
+            key: "mcAnimationDodge",
+            frames: this.anims.generateFrameNumbers("mc", { frames: [8,9,9,9,9,9,9,10,11,12,13,14,9,9,9,9,9,9,9,9,8] }),
+            frameRate: 15,
+            repeat: 0,
+          });
+
+        this.anims.create({
             key: "enemy1AnimationIdle",
             frames: this.anims.generateFrameNumbers("enemy1", {
               frames: [6, 6, 7, 7],

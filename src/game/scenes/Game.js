@@ -31,7 +31,7 @@ export class Game extends Scene {
         align: "left",
       })
       .setOrigin(0,0);
-
+    
     this.statsText = this.add
       .text(5, 5, 
         "Attack:  " + "\n" +
@@ -83,7 +83,7 @@ export class Game extends Scene {
     this.mc = this.add.sprite(450, 600)
     this.mc.scale = 5;
     this.mc.play("mcAnimationIdle")
-    this.mc.setDepth(1)
+    this.mc.setDepth(0.5)
 
     this.add.rectangle(450, 700, 150, 20).setStrokeStyle(4, 0x000000);
     this.mcBar = this.add.rectangle(450 - 150 / 2 + 2, 700, 0, 16, 0xff0000);
@@ -198,30 +198,26 @@ export class Game extends Scene {
       })
       .setOrigin(0, 0.5);
     
-    this.enemyJoke = this.add.text(1000, 600, "").setVisible(false)
+    this.enemyJoke = this.add.text(990, 500, "", {
+      fontFamily: "Marcellus",
+        fontSize: 18,
+        color: "#ffffff",
+        stroke: "#3d0700",
+        strokeThickness: 7,
+        align: "left",
+    }).setVisible(false)
+    this.enemyJoke.setOrigin(0, 0);
     this.enemyJoke.setTint(0xFFFFFF);
+    this.enemyJoke.setWordWrapWidth(300);
+    this.enemyJoke.setDepth(1)
     
-    // function typewriteText(text)
-    // {
-    //   const length = text.length
-    //   let i = 0
-    //   this.Clock.addEvent({
-    //     callback: () => {
-    //       this.label.text += text[i]
-    //       ++i
-    //     },
-    //     repeat: length - 1,
-    //     delay: 200
-    //   })
-    // }
     this.cam = this.cameras.main;
     this.targetScene = this.scene.get("Modal"); // sleeping
     this.targetCam = this.targetScene.cameras.main;
     this.defaultWidth = this.cameras.default.width;
+
     // BUS
     EventBus.emit("current-scene-ready", this);
-
-    // EVENTS
   }
 
   doAttackAnimate(props){
@@ -245,6 +241,19 @@ export class Game extends Scene {
         run: () => {
           this.enemyBar.width = props.enemyHp*(146/props.enemyMaxHp)
           this.enemyBarText.setText(props.enemyHp + "/" + props.enemyMaxHp)
+          this.enemy.anims.pause()
+          this.enemy.setTint(0xff0000, 0xffff00, 0xff0000, 0xff0000)
+          this.enemy.x = 1470 + 10
+          this.enemy.y = 600 - 1
+        }
+      },
+      {
+        at: 700,
+        run: () => {
+          this.enemy.setTint(0xffffff, 0xffffff, 0xffffff, 0xffffff)
+          this.enemy.x = 1470
+          this.enemy.y = 600
+          this.enemy.anims.resume()
         }
       },
       {
@@ -281,7 +290,7 @@ export class Game extends Scene {
         }
       },
       {
-        at: 500,
+        at: 600,
         run: () => {
           this.mcShieldIndicatorText.setText(props.mcShield)
         }
@@ -308,53 +317,92 @@ export class Game extends Scene {
       {
         at: 100,
         run: () => {
-          this.mc.play("enemy1AnimationDead")
+          this.mc.play("mcAnimationDodge")
           this.mc.chain("mcAnimationIdle")
         }
       },
       {
-        at: 500,
+        at: 1450,
         run: () => {
           this.mcDodgeIndicatorText.setText(props.mcDodgeTimer)
         }
       },
       {
-        at: 900,
+        at: 1500,
         run: () => {
           props.setCombatState(3)
-          }
+        }
       },
     ]);
-
+    
     dodgeTimeline.play()
   }
 
   getAttackedAnimate(props){
+
     const responseTimeline = this.add.timeline([
         {
           at: 500,
           run: () => {
-            this.enemyJoke.setText(props.jokePromiseState.data)
-            this.enemyJoke.setVisible(true)
+            this.tweens.add({
+              targets: this.enemyJoke,
+              x: -300,
+              duration: 1000,
+              repeat: 0,
+              repeatDelay: 500,
+              ease: 'Expo.easeIn',
+          });
             }
         },
         {
-          at: 1000,
+          at: 1350,
           run: () => {
-            this.mcBar.width = props.mcHp*(146/props.mcMaxHp)
-            this.mcBarText.setText(props.mcHp + "/" + props.mcMaxHp)
-            this.mcShieldIndicatorText.setText(props.mcShield)
+            if (props.mcDodgeRoll > props.mcDodge){
+              if(props.mcShield > 0){
+                this.mc.anims.pause()
+                this.mc.setTint(0xffffff, 0x00f0ff, 0xffffff, 0x00f0ff)
+                this.mcShieldIndicatorText.setText(props.mcShield)
+              }
+              else{
+                this.mcBar.width = props.mcHp*(146/props.mcMaxHp)
+                this.mcBarText.setText(props.mcHp + "/" + props.mcMaxHp)
+                this.mcShieldIndicatorText.setText(props.mcShield)
+                this.mc.anims.pause()
+                this.mc.setTint(0xff0000, 0xffff00, 0xff0000, 0xff0000)
+                this.mc.x = 450 - 10
+                this.mc.y = 600 - 1
+              }
+            }
+            else{
+              this.mc.anims.pause()
+              this.mc.scale = 4
+              this.mc.setTint(0x00ff1f, 0xafffb8, 0xafffb8, 0xffffff)
+              this.mc.x = 450 - 15
+              this.mc.y = 600 - 15
+            }
           }
         },
         {
-          at: 3200,
+          at: 1550,
+          run: () => {
+            this.mc.anims.resume()
+            this.mc.setTint(0xffffff, 0xffffff, 0xffffff, 0xffffff)
+            this.mc.x = 450
+            this.mc.y = 600
+            this.mc.scale = 5
+          }
+        },
+        {
+          at: 1600,
           run: () => {
             this.enemyJoke.setVisible(false)
+            this.enemyJoke.x = 990
+            this.enemyJoke.y = 500
             if (props.mcAlive) {
               props.setCombatState(0)
             }
             else{
-              this.mc.play("enemy1AnimationDead")
+              this.mc.play("mcAnimationDead")
               this.mc.once('animationcomplete', ()=>{ 
                 props.setCombatState(-1)
                 window.location.hash = "#/gameover";
@@ -363,7 +411,26 @@ export class Game extends Scene {
           }
         },
       ]);
-    responseTimeline.play()
+      this.enemyJoke.setText("")
+      this.enemyJoke.setVisible(true)
+      const initialDelay = 1000;
+      const delay = 35;
+      const iStartValue = -Math.round(initialDelay/delay);
+      const length = props.jokePromiseState.data.length;
+      let i = iStartValue
+      this.time.addEvent({
+          callback: () => {
+          if(i>=0){
+            this.enemyJoke.text += props.jokePromiseState.data[i];
+          }
+          ++i
+          if(i==length){
+            responseTimeline.play()
+          }
+          },
+          repeat: length - (1+iStartValue),
+          delay: delay
+        });
   }
 
   updateSceneTurn(props){
@@ -445,5 +512,6 @@ export class Game extends Scene {
       });
     });
   }
+
 }
 

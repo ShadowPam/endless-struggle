@@ -142,13 +142,14 @@ const model = {
 
     progressDodgeTimer(){
         if (this.mcDodgeTimer > 0){
+            this.mcDodgeTimer -= 1
+        }
+        if (this.mcDodgeTimer > 0){
             this.mcDodgeRoll = this.mcPRNG()
         }
         else{
             this.mcDodgeRoll = 2 // 2 -> guaranteed hit
-        }
-        if (this.mcDodgeTimer > 0){
-            this.mcDodgeTimer -= 1
+            console.log("awdjwa")
         }
     },
 
