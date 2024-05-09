@@ -1,21 +1,22 @@
-export function resolvePromise(prms, promiseState) { // from dinner planner
+export function resolvePromise(prms, promiseState) {
+    // from dinner planner
 
-  function dataACB(result) {
-    if (promiseState.promise == prms) {
-      promiseState.data = result;
+    function dataACB(result) {
+        if (promiseState.promise == prms) {
+            promiseState.data = result;
+        }
     }
-  }
 
-  function errorACB(err) {
-    promiseState.error = err;
-  }
+    function errorACB(err) {
+        promiseState.error = err;
+    }
 
-  if (prms == undefined) {
-    return;
-  }
-  promiseState.promise = prms;
-  promiseState.data = null;
-  promiseState.error = null;
+    if (prms == undefined) {
+        return;
+    }
+    promiseState.promise = prms;
+    promiseState.data = null;
+    promiseState.error = null;
 
-  prms.then(dataACB).catch(errorACB);
+    prms.then(dataACB).catch(errorACB);
 }

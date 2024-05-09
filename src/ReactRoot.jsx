@@ -6,20 +6,20 @@ import { RouterProvider, createHashRouter } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 
 function makeRouter(props) {
-  return createHashRouter([
-    {
-      path: "/",
-      element: <MainMenu model={props.model}/>,
-    },
-    {
-      path: "/menu",
-      element: <MainMenu model={props.model}/>,
-    },
-    {
-      path: "/game",
-      element: <Game model={props.model}/>,
-    },
-    /*  {
+    return createHashRouter([
+        {
+            path: "/",
+            element: <MainMenu model={props.model} />,
+        },
+        {
+            path: "/menu",
+            element: <MainMenu model={props.model} />,
+        },
+        {
+            path: "/game",
+            element: <Game model={props.model} />,
+        },
+        /*  {
       path: "/settings",
       element: <Settings model={props.model}/>,
     },
@@ -31,17 +31,15 @@ function makeRouter(props) {
       path: "/login",
       element: <Login model={props.model}/>,
     }, */
-  ]);
+    ]);
 }
 
-const ReactRoot = observer(
-  function ReactRoot(props){
-    return(
-      <React.StrictMode>
-      <RouterProvider router={makeRouter(props)} />
-      </React.StrictMode>
-    )
-  }
-)
+const ReactRoot = observer(function ReactRoot(props) {
+    return (
+        <React.StrictMode>
+            <RouterProvider router={makeRouter(props)} />
+        </React.StrictMode>
+    );
+});
 
-export { ReactRoot }
+export { ReactRoot };
