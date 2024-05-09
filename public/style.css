@@ -9,7 +9,7 @@ body {
     margin: 0;
     padding: 0;
     color: rgba(255, 255, 255, 0.87);
-    background-color: #000000; 
+    background-color: #000000;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -27,15 +27,15 @@ body {
 }
 
 .pausebutton {
-    position:absolute;
-    left:95%;
-    top:5%
+    position: absolute;
+    left: 95%;
+    top: 5%;
 }
 
 .jokestatus {
-    position:absolute;
-    left:0.5%;
-    top:95%;
+    position: absolute;
+    left: 0.5%;
+    top: 95%;
     width: 30px;
     height: 30px;
 }
@@ -111,7 +111,7 @@ body {
 /*Menu styles */
 
 .menu {
-    position:absolute;
+    position: absolute;
     top: 50%;
     left: 50%;
     height: 50%;
@@ -122,19 +122,19 @@ body {
 }
 
 .menubutton {
-    flex: 1.0;
+    flex: 1;
     margin: 20px;
 }
 
 .menulogo {
-    position:absolute;
+    position: absolute;
     top: 5%;
     left: 5%;
     transform: translate(-50%, -50%);
 }
 
 .menulogin {
-    position:absolute;
+    position: absolute;
     top: 5%;
     left: 95%;
     transform: translate(-50%, -50%);
