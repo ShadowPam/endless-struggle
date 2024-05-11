@@ -2,10 +2,29 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Game } from "./presenters/GamePresenter";
 import { MainMenu } from "./presenters/MainMenuPresenter.jsx";
+import { Login } from "./presenters/LoginPresenter.jsx";
 import { RouterProvider, createHashRouter } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 
 function makeRouter(props) {
+  return createHashRouter([
+    {
+      path: "/",
+      element: <MainMenu model={props.model}/>,
+    },
+    {
+      path: "/menu",
+      element: <MainMenu model={props.model}/>,
+    },
+    {
+      path: "/game",
+      element: <Game model={props.model}/>,
+    },
+    {
+      path: "/login",
+      element: <Login model={props.model}/>,
+    },
+    /*  {
     return createHashRouter([
         {
             path: "/",
@@ -26,10 +45,6 @@ function makeRouter(props) {
     {
       path: "/leaderboard",
       element: <LeaderBoard model={props.model}/>,
-    },
-    {
-      path: "/login",
-      element: <Login model={props.model}/>,
     }, */
     ]);
 }

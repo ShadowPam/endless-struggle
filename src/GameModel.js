@@ -47,6 +47,7 @@ const model = {
 
     initializeModel() {
         if (!this.initialized) {
+            this.mcAlive = true;
             this.mcMaxHp = 50;
             this.mcHp = 50;
             this.mcAttack = 10;
@@ -57,7 +58,8 @@ const model = {
             this.mcDodge = 0.15;
             this.mcDodgeTimer = 0;
             this.mcDodgeRoll = 2;
-            (this.enemyDamageSpread = 0.6), (this.currentRound = 1);
+            (this.enemyDamageSpread = 0.6); 
+            (this.currentRound = 1);
             this.shouldRunStateZeroOnReady = true;
 
             this.setNewSeed(); // seed -1
@@ -71,7 +73,7 @@ const model = {
     },
 
     resetModel() {
-        this.mcAlive = true;
+        this.mcAlive = false;
         this.mcMaxHp = null;
         this.mcHp = null;
         this.mcDamage = null;
@@ -83,7 +85,7 @@ const model = {
         this.mcDodgeRoll = null;
         this.mcPRNG = {};
 
-        this.enemyAlive = true;
+        this.enemyAlive = false;
         this.enemyName = null;
         this.enemyKey = null;
         this.enemyMaxHp = null;
@@ -143,6 +145,7 @@ const model = {
         if (this.mcDodgeTimer > 0) {
             this.mcDodgeTimer -= 1;
         }
+
         if (this.mcDodgeTimer > 0) {
             this.mcDodgeRoll = this.mcPRNG();
         } else {

@@ -1,4 +1,8 @@
-export function MainMenuView() {
+
+import { signOut } from "firebase/auth";
+import { auth } from "../firebaseModel";
+
+export function MainMenuView(props) {
     function GoToGame() {
         window.location.hash = "#/game";
     }
@@ -15,13 +19,26 @@ export function MainMenuView() {
     return (
         <div>
             <b className="menulogo">LOGO</b>
-            <button className="menulogin" onClick={GoToLogin}>
-                LOGIN
-            </button>
-            <div className="menu">
-                <button className="menubutton" onClick={GoToGame}>
-                    START
+            {!props.user ? (
+                <button className="menulogin" onClick={GoToLogin}>
+                    LOGIN
                 </button>
+            ) : (
+                <button className="menulogin" onClick={() => signOut(auth)}>
+                    Sign Out
+                </button>
+            )}
+
+            <div className="menu">
+                {!props.initialized ? (
+                    <button className="menubutton" onClick={GoToGame}>
+                        START
+                    </button>
+                ) : (
+                    <button className="menubutton" onClick={GoToGame}>
+                        CONTINUE
+                    </button>
+                )}
                 <button className="menubutton" onClick={GoToSettings}>
                     SETTINGS
                 </button>

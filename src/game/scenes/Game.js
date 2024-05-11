@@ -362,94 +362,125 @@ export class Game extends Scene {
         dodgeTimeline.play();
     }
 
-    getAttackedAnimate(props) {
-        const responseTimeline = this.add.timeline([
-            {
-                at: 500,
-                run: () => {
-                    this.tweens.add({
-                        targets: this.enemyJoke,
-                        x: -300,
-                        duration: 1000,
-                        repeat: 0,
-                        repeatDelay: 500,
-                        ease: "Expo.easeIn",
-                    });
-                },
-            },
-            {
-                at: 1350,
-                run: () => {
-                    if (props.mcDodgeRoll > props.mcDodge) {
-                        if (props.mcShield > 0) {
-                            this.mc.anims.pause();
-                            this.mc.setTint(0xffffff, 0x00f0ff, 0xffffff, 0x00f0ff);
-                            this.mcShieldIndicatorText.setText(props.mcShield);
-                        } else {
-                            this.mcBar.width = props.mcHp * (146 / props.mcMaxHp);
-                            this.mcBarText.setText(props.mcHp + "/" + props.mcMaxHp);
-                            this.mcShieldIndicatorText.setText(props.mcShield);
-                            this.mc.anims.pause();
-                            this.mc.setTint(0xff0000, 0xffff00, 0xff0000, 0xff0000);
-                            this.mc.x = 450 - 10;
-                            this.mc.y = 600 - 1;
-                        }
-                    } else {
-                        this.mc.anims.pause();
-                        this.mc.scale = 4;
-                        this.mc.setTint(0x00ff1f, 0xafffb8, 0xafffb8, 0xffffff);
-                        this.mc.x = 450 - 15;
-                        this.mc.y = 600 - 15;
-                    }
-                },
-            },
-            {
-                at: 1550,
-                run: () => {
-                    this.mc.anims.resume();
-                    this.mc.setTint(0xffffff, 0xffffff, 0xffffff, 0xffffff);
-                    this.mc.x = 450;
-                    this.mc.y = 600;
-                    this.mc.scale = 5;
-                },
-            },
-            {
-                at: 1600,
-                run: () => {
-                    this.enemyJoke.setVisible(false);
-                    this.enemyJoke.x = 990;
-                    this.enemyJoke.y = 500;
-                    if (props.mcAlive) {
-                        props.setCombatState(0);
-                    } else {
-                        this.mc.play("mcAnimationDead");
-                        this.mc.once("animationcomplete", () => {
-                            props.setCombatState(-1);
-                            window.location.hash = "#/gameover";
-                        });
-                    }
-                },
-            },
-        ]);
-        this.enemyJoke.setText("");
-        this.enemyJoke.setVisible(true);
-        const initialDelay = 1000;
-        const delay = 35;
-        const iStartValue = -Math.round(initialDelay / delay);
-        const length = props.jokePromiseState.data.length;
-        let i = iStartValue;
-        this.time.addEvent({
-            callback: () => {
-                if (i >= 0) {
-                    this.enemyJoke.text += props.jokePromiseState.data[i];
-                }
-                ++i;
-                if (i == length) {
-                    responseTimeline.play();
-                }
-            },
-            repeat: length - (1 + iStartValue),
-            delay: delay,
+        }
+      },
+      {
+        at: 100,
+        run: () => {
+          this.mc.play("mcAnimationDodge")
+          this.mc.chain("mcAnimationIdle")
+        }
+      },
+      {
+        at: 1450,
+        run: () => {
+          this.mcDodgeIndicatorText.setText(props.mcDodgeTimer)
+        }
+      },
+      {
+        at: 1500,
+        run: () => {
+          props.setCombatState(3)
+        }
+      },
+    ]);
+    
+    dodgeTimeline.play()
+  }
+
+  getAttackedAnimate(props){
+
+    const responseTimeline = this.add.timeline([
+        {
+          at: 500,
+          run: () => {
+            this.tweens.add({
+              targets: this.enemyJoke,
+              x: -300,
+              duration: 1000,
+              repeat: 0,
+              repeatDelay: 500,
+              ease: 'Expo.easeIn',
+          });
+            }
+        },
+        {
+          at: 1350,
+          run: () => {
+            if (props.mcDodgeRoll > props.mcDodge){
+              if(props.mcShield > 0){
+                this.mc.anims.pause()
+                this.mc.setTint(0xffffff, 0x00f0ff, 0xffffff, 0x00f0ff)
+                this.mcShieldIndicatorText.setText(props.mcShield)
+              }
+              else{
+                this.mcBar.width = props.mcHp*(146/props.mcMaxHp)
+                this.mcBarText.setText(props.mcHp + "/" + props.mcMaxHp)
+                this.mcShieldIndicatorText.setText(props.mcShield)
+                this.mc.anims.pause()
+                this.mc.setTint(0xff0000, 0xffff00, 0xff0000, 0xff0000)
+                this.mc.x = 450 - 10
+                this.mc.y = 600 - 1
+              }
+            }
+            else{
+              this.mc.anims.pause()
+              this.mc.scale = 4
+              this.mc.setTint(0x00ff1f, 0xafffb8, 0xafffb8, 0xffffff)
+              this.mc.x = 450 - 15
+              this.mc.y = 600 - 15
+            }
+          }
+        },
+        {
+          at: 1550,
+          run: () => {
+            this.mc.anims.resume()
+            this.mc.setTint(0xffffff, 0xffffff, 0xffffff, 0xffffff)
+            this.mc.x = 450
+            this.mc.y = 600
+            this.mc.scale = 5
+          }
+        },
+        {
+          at: 1600,
+          run: () => {
+            this.enemyJoke.setVisible(false)
+            this.enemyJoke.x = 990
+            this.enemyJoke.y = 500
+            if (props.mcAlive) {
+              props.setCombatState(0)
+            }
+            else{
+              this.mc.play("mcAnimationDead")
+              this.mc.once('animationcomplete', ()=>{ 
+                props.setCombatState(-1)
+                props.resetModel();
+                window.location.hash = "#/gameover";
+              })
+            }
+          }
+        },
+      ]);
+      this.enemyJoke.setText("")
+      this.enemyJoke.setVisible(true)
+      const initialDelay = 1000;
+      const delay = 35;
+      const iStartValue = -Math.round(initialDelay/delay);
+      const length = props.jokePromiseState.data.length;
+      let i = iStartValue
+      this.time.addEvent({
+          callback: () => {
+          if(i>=0){
+            this.enemyJoke.text += props.jokePromiseState.data[i];
+          }
+          ++i
+          if(i==length){
+            responseTimeline.play()
+          }
+          },
+          repeat: length - (1+iStartValue),
+          delay: delay
         });
     }
 
