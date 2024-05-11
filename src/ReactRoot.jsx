@@ -25,6 +25,20 @@ function makeRouter(props) {
       element: <Login model={props.model}/>,
     },
     /*  {
+    return createHashRouter([
+        {
+            path: "/",
+            element: <MainMenu model={props.model} />,
+        },
+        {
+            path: "/menu",
+            element: <MainMenu model={props.model} />,
+        },
+        {
+            path: "/game",
+            element: <Game model={props.model} />,
+        },
+        /*  {
       path: "/settings",
       element: <Settings model={props.model}/>,
     },
@@ -32,17 +46,15 @@ function makeRouter(props) {
       path: "/leaderboard",
       element: <LeaderBoard model={props.model}/>,
     }, */
-  ]);
+    ]);
 }
 
-const ReactRoot = observer(
-  function ReactRoot(props){
-    return(
-      <React.StrictMode>
-      <RouterProvider router={makeRouter(props)} />
-      </React.StrictMode>
-    )
-  }
-)
+const ReactRoot = observer(function ReactRoot(props) {
+    return (
+        <React.StrictMode>
+            <RouterProvider router={makeRouter(props)} />
+        </React.StrictMode>
+    );
+});
 
-export { ReactRoot }
+export { ReactRoot };

@@ -146,7 +146,6 @@ const model = {
             this.mcDodgeTimer -= 1;
         }
 
-        
         if (this.mcDodgeTimer > 0) {
             this.mcDodgeRoll = this.mcPRNG();
         } else {
@@ -245,7 +244,6 @@ const model = {
     },
 
     takeStateSnapshot() {
-        console.log("here");
         this.stateSnapshot.mcAlive = this.mcAlive;
         this.stateSnapshot.mcMaxHp = this.mcMaxHp;
         this.stateSnapshot.mcHp = this.mcHp;
