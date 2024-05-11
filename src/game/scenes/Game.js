@@ -405,6 +405,7 @@ export class Game extends Scene {
               this.mc.play("mcAnimationDead")
               this.mc.once('animationcomplete', ()=>{ 
                 props.setCombatState(-1)
+                props.resetModel();
                 window.location.hash = "#/gameover";
               })
             }
