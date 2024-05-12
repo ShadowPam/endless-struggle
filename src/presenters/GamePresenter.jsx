@@ -7,6 +7,13 @@ import { EventBus } from "../game/EventBus";
 
 const Game = observer(function GameRender(props) {
     const phaserRef = useRef();
+
+    //right now we get an error that is not a problem but annoying can be fixed with the following however
+    //only if you are logged in, if you are logged out this breaks the game, i currently dont know why
+    /* useEffect(() => {
+        props.model.initializeModel();
+    }, []) */
+    
     props.model.initializeModel();
 
     function onMenuACB() {

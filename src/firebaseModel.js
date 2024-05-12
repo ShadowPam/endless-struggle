@@ -9,7 +9,6 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const PATH = "endless-struggle";
-let rf = ref(db, PATH);
 export const auth = getAuth(app);
 
 function modelToPersistence(model) {
@@ -52,12 +51,24 @@ function modelToPersistence(model) {
     };
 }
 
+function globalModelToPersistance(globalModel) {
+    return {
+        global: {
+            leader_board: globalModel.leaderboard,
+        },
+    };
+}
+
 function persistenceToModel(dataFromPersistance, model) {
     toModelPlayer(dataFromPersistance?.player, model);
 
     toModelEnemy(dataFromPersistance?.enemy, model);
 
     toModelRun(dataFromPersistance?.run, model);
+}
+
+function globalPersistanceToGlobalModel(dataFromPersistance, globalModel) {
+    toGlobalModel(dataFromPersistance?.global, globalModel);
 }
 
 function toModelPlayer(player_data, model) {
@@ -98,10 +109,19 @@ function toModelRun(run_data, model) {
     model.initialized = run_data?.initialized || false;
 }
 
-function saveToFirebase(model) {
+function toGlobalModel(global_data, globalModel) {
+    globalModel.leader_board = global_data?.leader_board || [{name: "Kid", score: 3}];
+}
+
+function saveToFirebase(model, globalModel) {
     if (model.ready && model.user) {
         const model_path = PATH + "/" + model.user.uid;
         set(ref(db, model_path), modelToPersistence(model));
+    }
+
+    if (globalModel.ready) {
+        const global_model_path = PATH + "/global";
+        set(ref(db, global_model_path), globalModelToPersistance(globalModel));
     }
 }
 
@@ -122,7 +142,22 @@ function readFromFirebase(model) {
     }
 }
 
-function connectToFirebase(model, watchFunction) {
+function readFromFirebaseGlobal(globalModel) {
+    globalModel.ready = false;
+
+    const global_model_path = PATH + "/global";
+
+    return get(ref(db, global_model_path))
+    .then(function convertACB(snapshot) {
+        console.log(snapshot.val());
+        return globalPersistanceToGlobalModel(snapshot.val(), globalModel);
+    })
+    .then(function setGlobalModelReadyACB() {
+        globalModel.ready = true;
+    });
+}
+
+function connectToFirebase(model, watchFunction, globalModel) {
     function checkModelACB() {
         return [
             model.stateSnapshot.mcAlive,
@@ -165,11 +200,12 @@ function connectToFirebase(model, watchFunction) {
             model.stateSnapshot.enemyDamage,
             model.stateSnapshot.mcPRNG,
             model.stateSnapshot.enemyPRNG,
+            globalModel.leaderboard,
         ];
     }
 
     function saveModelACB() {
-        saveToFirebase(model);
+        saveToFirebase(model, globalModel);
     }
 
     function loginOrOutACB(user) {
@@ -179,7 +215,9 @@ function connectToFirebase(model, watchFunction) {
             model.user = null;
         }
         model.ready = false;
+        globalModel.ready = false;
         readFromFirebase(model);
+        readFromFirebaseGlobal(globalModel);
     }
 
     onAuthStateChanged(auth, loginOrOutACB);
