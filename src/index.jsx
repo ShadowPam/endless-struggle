@@ -16,6 +16,7 @@ createRoot(document.getElementById("root")).render(
 
 import { connectToFirebase } from "./firebaseModel.js";
 
-window.myModel= reactiveModel; 
+window.myModel= reactiveGlobalModel; 
 
-connectToFirebase(reactiveModel, reaction, globalModel);
+connectToFirebase(reactiveModel, reaction, reactiveGlobalModel);
+//connectToFireBaseGlobal(reactiveGlobalModel, reaction);

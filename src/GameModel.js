@@ -3,6 +3,7 @@ import { resolvePromise } from "./resolvePromise";
 import enemies from "./Enemies.js";
 import basicRewards from "./BasicRewards.js";
 import seedrandom from "seedrandom";
+import { auth } from "./firebaseModel.js";
 
 const model = {
     mcAlive: true,
@@ -47,6 +48,9 @@ const model = {
 
     initializeModel() {
         if (!this.initialized) {
+            if (this.ready) {
+                this.mcName = auth.currentUser.email;
+            }
             this.mcAlive = true;
             this.mcMaxHp = 50;
             this.mcHp = 50;
@@ -58,8 +62,8 @@ const model = {
             this.mcDodge = 0.15;
             this.mcDodgeTimer = 0;
             this.mcDodgeRoll = 2;
-            (this.enemyDamageSpread = 0.6); 
-            (this.currentRound = 1);
+            this.enemyDamageSpread = 0.6;
+            this.currentRound = 1;
             this.shouldRunStateZeroOnReady = true;
 
             this.setNewSeed(); // seed -1

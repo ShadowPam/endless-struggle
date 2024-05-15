@@ -1,5 +1,5 @@
 const globalModel = {
-    leaderboard: [{name: "Kid", score: 3},],
+    leaderboard: [{name: "Kid", score: 3}],
 
     paginated: 10,
 

@@ -139,3 +139,18 @@ body {
     left: 95%;
     transform: translate(-50%, -50%);
 }
+
+div.leaderboard div {
+    width: 50%;
+    margin: auto;
+    padding-left: 30%;
+}
+
+div.leaderboard p {
+    display: inline;
+    padding: 2%;
+}
+
+#lBoard {
+    margin-bottom: 50px;
+}
