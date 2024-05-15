@@ -52,6 +52,7 @@ function modelToPersistence(model) {
 }
 
 function globalModelToPersistance(globalModel) {
+    console.log("i am here");
     return {
         global: {
             leader_board: globalModel.leaderboard,
@@ -110,7 +111,7 @@ function toModelRun(run_data, model) {
 }
 
 function toGlobalModel(global_data, globalModel) {
-    globalModel.leader_board = global_data?.leader_board || [{name: "Kid", score: 3}];
+    globalModel.leaderboard = global_data?.leader_board || [{ name: "Kid", score: 3 }];
 }
 
 function saveToFirebase(model, globalModel) {
@@ -148,13 +149,13 @@ function readFromFirebaseGlobal(globalModel) {
     const global_model_path = PATH + "/global";
 
     return get(ref(db, global_model_path))
-    .then(function convertACB(snapshot) {
-        console.log(snapshot.val());
-        return globalPersistanceToGlobalModel(snapshot.val(), globalModel);
-    })
-    .then(function setGlobalModelReadyACB() {
-        globalModel.ready = true;
-    });
+        .then(function convertACB(snapshot) {
+            console.log(snapshot.val());
+            return globalPersistanceToGlobalModel(snapshot.val(), globalModel);
+        })
+        .then(function setGlobalModelReadyACB() {
+            globalModel.ready = true;
+        });
 }
 
 function connectToFirebase(model, watchFunction, globalModel) {
@@ -229,4 +230,7 @@ export {
     persistenceToModel,
     saveToFirebase,
     readFromFirebase,
+    readFromFirebaseGlobal,
+    globalPersistanceToGlobalModel,
+    globalModelToPersistance
 };

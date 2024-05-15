@@ -1,8 +1,16 @@
 import { GameOverView } from "../views/GameOverView";
 import { observer } from "mobx-react-lite";
+import { toJS } from 'mobx';
 
 const GameOver = observer(function GameOverRender(props) {
-    return <GameOverView model={props.model} />;
+
+    function saveScoreToLeaderboardACB(){
+        props.globalModel.leaderboard = [...props.globalModel.leaderboard, {name: props.model.mcName, score: props.model.currentRound}];
+        console.log("hello", toJS(props.globalModel.leaderboard));
+        props.model.resetModel();
+    }
+
+    return <GameOverView model={props.model} saveScore={saveScoreToLeaderboardACB} />;
 });
 
 export { GameOver };

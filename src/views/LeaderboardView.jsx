@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Leaderboard from "react-leaderboard";
 
 export function LeaderboardView(props) {
@@ -6,7 +7,6 @@ export function LeaderboardView(props) {
     }
 
     const userList = props.leaderboard;
-
     const paginated = props.paginated;
 
     return (
@@ -14,7 +14,7 @@ export function LeaderboardView(props) {
             <button className="pausebutton" onClick={GoToMenu}>
                 Back to Menu
             </button>
-            <div className="string">
+            <div className="leaderboard">
                 <Leaderboard users={userList} paginate={paginated} />
             </div>
         </>
