@@ -14,7 +14,7 @@ You can take a look at our [Project Design Document](https://docs.google.com/doc
 
 However currently we need to finish up the gameplay loop. Implement persistance, login, leaderboard and settings.
 
-## Structure
+## Structure s
 
 -   `index.html` - A basic HTML page to contain the game.
 -   `src` - Contains the React client source code.
