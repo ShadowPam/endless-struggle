@@ -10,7 +10,7 @@ export function HowToView(props) {
             </button>
             <div className="howToPlay">
                 <h1>HOW TO PLAY ENDLESS STRUGGLE</h1>
-                <img src="../../dist/howToImage.png" className="howToImage"/>
+                <img src="../../howToImage.png" className="howToImage"/>
                 <p>
                     1. YOUR ATTACK STAT - <span>YOUR DAMAGE IS CALCULATED FROM THIS.</span>
                     <br />
