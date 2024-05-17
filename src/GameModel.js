@@ -183,6 +183,8 @@ const model = {
         this.enemyMaxHp = Math.floor(this.currentEnemy.health * (this.enemyHpScalar ** this.currentRound));
         this.enemyHp = this.enemyMaxHp;
         this.enemyAttack = Math.floor(this.currentEnemy.attack * (this.enemyAttackScalar ** this.currentRound));
+        console.log(this.enemyAttackScalar)
+        console.log(this.enemyHpScalar)
         this.enemyDamage = this.enemyAttack;
     },
 
@@ -210,6 +212,7 @@ const model = {
             array[index] = array[j];
             array[j] = x;
         }
+        console.log(this.seed,array)
         return array.slice(0, nr);
     },
 
