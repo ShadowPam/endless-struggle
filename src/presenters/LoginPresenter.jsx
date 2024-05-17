@@ -9,19 +9,49 @@ import {
 } from "firebase/auth";
 
 const Login = observer(function LoginRender(props) {
+
+    function GoToMenuACB() {
+        window.location.hash = "#/menu";
+    }
+
+
     function onLoginACB(email, password) {
         setPersistence(auth, browserLocalPersistence).then(() => {
-            signInWithEmailAndPassword(auth, email, password);
+            signInWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                GoToMenuACB();
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+
+                console.log(errorCode);
+                console.log(errorMessage);
+
+                alert("Email/password is wrong.")
+              });
         });
     }
 
     function onSignUpACB(email, password) {
         setPersistence(auth, browserLocalPersistence).then(() => {
-            createUserWithEmailAndPassword(auth, email, password);
+            createUserWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                GoToMenuACB();
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+
+                console.log(errorCode);
+                console.log(errorMessage);
+
+                alert("Password should be at least 6 characters!")
+              });
         });
     }
 
-    return <LoginView user={props.model.user} login={onLoginACB} signup={onSignUpACB} />;
+    return <LoginView user={props.model.user} login={onLoginACB} signup={onSignUpACB} redirectMenu={GoToMenuACB} />;
 });
 
 export { Login };
