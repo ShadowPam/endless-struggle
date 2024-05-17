@@ -157,3 +157,47 @@ div.leaderboard p {
 #lBoard {
     margin-bottom: 50px;
 }
+
+.signInForm {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#email {
+    margin-bottom: 10%;
+}
+
+.loginButton {
+    margin-right: 18%;
+    background-color: #013220; /* Green */
+    border: none;
+    color: white;
+    padding: 2px 16px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    transition-duration: 0.4s;
+}
+
+.loginButton:hover {
+    background-color: #04aa6d; /* Green */
+    color: white;
+}
+
+.signupButton {
+    background-color: #000058; /* Green */
+    border: none;
+    color: white;
+    padding: 2px 8px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    transition-duration: 0.4s;
+}
+
+.signupButton:hover {
+    background-color: #0494aa; /* Green */
+    color: white;
+}

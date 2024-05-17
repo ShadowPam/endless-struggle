@@ -5,7 +5,7 @@ export function LoginView(props) {
     let buttonIndex = 0;
 
     function GoToMenu() {
-        window.location.hash = "#/menu";
+        props.redirectMenu();
     }
 
     function loginOrSignUpACB(e) {
@@ -16,7 +16,6 @@ export function LoginView(props) {
         } else {
             signUpACB();
         }
-        GoToMenu();
     }
 
     function loginACB(e) {
@@ -41,7 +40,7 @@ export function LoginView(props) {
                 Back to Menu
             </button>
             {!props.user ? (
-                <form onSubmit={loginOrSignUpACB}>
+                <form onSubmit={loginOrSignUpACB} className="signInForm">
                     <div>
                         <label htmlFor="email">Email:</label>
                         <br />
@@ -53,7 +52,7 @@ export function LoginView(props) {
                             required
                         />
                         <br />
-                        <label htmlFor="password">password:</label>
+                        <label htmlFor="password">Password:</label>
                         <br />
                         <input
                             type="password"
@@ -64,10 +63,10 @@ export function LoginView(props) {
                         />
                         <br />
                         <br />
-                        <button type="submit" name="login">
+                        <button type="submit" name="login" className="loginButton">
                             Login
                         </button>
-                        <button type="submit" onClick={() => buttonIndex++} name="signup">
+                        <button type="submit" onClick={() => buttonIndex++} name="signup" className="signupButton">
                             Sign-up
                         </button>
                     </div>
