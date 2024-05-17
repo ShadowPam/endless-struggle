@@ -24,7 +24,10 @@ export function MainMenuView(props) {
                     LOGIN
                 </button>
             ) : (
-                <button className="menulogin" onClick={() => signOut(auth)}>
+                <button className="menulogin" onClick={() => {
+                    props.model.resetModel();
+                    signOut(auth);
+                    }}>
                     Sign Out
                 </button>
             )}

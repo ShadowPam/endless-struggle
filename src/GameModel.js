@@ -84,6 +84,7 @@ const model = {
     resetModel() {
         this.mcAlive = false;
         this.mcMaxHp = null;
+        this.mcName = "Player";
         this.mcHp = null;
         this.mcDamage = null;
         this.mcAttack = null;

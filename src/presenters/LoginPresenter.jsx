@@ -19,6 +19,7 @@ const Login = observer(function LoginRender(props) {
         setPersistence(auth, browserLocalPersistence).then(() => {
             signInWithEmailAndPassword(auth, email, password)
             .then(() => {
+                props.model.resetModel();
                 GoToMenuACB();
             })
             .catch((error) => {
@@ -36,7 +37,8 @@ const Login = observer(function LoginRender(props) {
     function onSignUpACB(email, password) {
         setPersistence(auth, browserLocalPersistence).then(() => {
             createUserWithEmailAndPassword(auth, email, password)
-            .then(() => {
+            .then((e) => {
+                props.model.resetModel();
                 GoToMenuACB();
             })
             .catch((error) => {
@@ -46,7 +48,11 @@ const Login = observer(function LoginRender(props) {
                 console.log(errorCode);
                 console.log(errorMessage);
 
-                alert("Password should be at least 6 characters!")
+                if (errorCode == "auth/email-already-in-use"){
+                    alert("Email already in use!")
+                } else{
+                    alert("Password should be at least 6 characters!")
+                }
               });
         });
     }
