@@ -28,6 +28,8 @@ export function GameView(props) {
                     className="button attackbutton"
                     onClick={AttackACB}
                 >
+                    <img src="public\assets\AttackIcon.png"></img>
+                    <br></br>
                     ATTACK
                 </button>
                 <button
@@ -35,6 +37,8 @@ export function GameView(props) {
                     className="button shieldbutton"
                     onClick={ShieldACB}
                 >
+                    <img src="public\assets\ShieldIcon.png"></img>
+                    <br></br>
                     SHIELD
                 </button>
                 <button
@@ -42,6 +46,8 @@ export function GameView(props) {
                     className="button dodgebutton"
                     onClick={DodgeACB}
                 >
+                    <img src="public\assets\DodgeIcon.png"></img>
+                    <br></br>
                     DODGE
                 </button>
             </div>

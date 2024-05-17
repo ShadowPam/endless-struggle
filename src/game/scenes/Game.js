@@ -226,7 +226,7 @@ export class Game extends Scene {
             .setOrigin(0, 0.5);
 
         this.enemyJoke = this.add
-            .text(990, 500, "", {
+            .text(990, 450, "", {
                 fontFamily: "Marcellus",
                 fontSize: 18,
                 color: "#ffffff",

@@ -155,6 +155,9 @@ const model = {
     },
 
     progressDodgeTimer() {
+        if (this.mcDodge > 0.95){ // enforce dodge cap
+            this.mcDodge = 0.95
+        }
         if (this.mcDodgeTimer > 0) {
             this.mcDodgeTimer -= 1;
         }

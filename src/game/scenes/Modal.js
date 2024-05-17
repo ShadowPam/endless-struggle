@@ -14,7 +14,7 @@ export class Modal extends Scene {
         this.bg.setAlpha(1);
 
         this.basicRewards = [{}, {}, {}];
-        function createBasicRewardsCB(object, index) {
+        function createRewardsCB(object, index) {
             let xPos;
             if (index === 0) {
                 xPos = 380;
@@ -45,7 +45,7 @@ export class Modal extends Scene {
                 .container(0, 0, [bg, outerBorder, innerBorder, image, text])
                 .setVisible(false);
         }
-        this.basicRewards = this.basicRewards.map(createBasicRewardsCB, this);
+        this.basicRewards = this.basicRewards.map(createRewardsCB, this);
 
         this.cam = this.cameras.main;
         this.targetScene = this.scene.get("Game"); // sleeping

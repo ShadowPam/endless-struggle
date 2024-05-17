@@ -59,7 +59,7 @@ body {
     padding: 0;
     background-color: #202020;
     color: rgba(255, 255, 255, 0.87);
-    border: 50px solid rgb(32, 32, 32);
+    border: 30px solid rgb(32, 32, 32);
     cursor: pointer;
     transition: all 0.3s;
 
