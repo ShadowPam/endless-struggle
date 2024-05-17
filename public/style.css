@@ -201,3 +201,24 @@ div.leaderboard p {
     background-color: #0494aa; /* Green */
     color: white;
 }
+
+.howToPlay {
+    text-align: center;
+    font-family: "Helvetica";
+    padding: 20px;
+}
+
+div.howToPlay p {
+    font-size: 18px;
+    font-weight: 400;
+}
+
+div.howToPlay span {
+    font-size: 13px;
+    font-weight: 300;
+}
+
+.howToImage {
+    width: 1080px; /* you can use % */
+    height: auto;
+}

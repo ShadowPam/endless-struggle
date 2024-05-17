@@ -7,6 +7,7 @@ import { LeaderboardOwn } from "./presenters/LeaderboardPresenter.jsx";
 import { GameOver } from "./presenters/GameOverPresenter.jsx";
 import { RouterProvider, createHashRouter } from "react-router-dom";
 import { observer } from "mobx-react-lite";
+import { HowTo } from "./presenters/HowToPresenter.jsx";
 
 function makeRouter(props) {
   return createHashRouter([
@@ -33,6 +34,10 @@ function makeRouter(props) {
     {
       path: "/gameover",
       element: <GameOver model={props.model} globalModel={props.globalModel}/>,
+    },
+    {
+      path: "/how-to",
+      element: <HowTo/>,
     },
     /*  {
     return createHashRouter([
