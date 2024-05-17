@@ -19,7 +19,7 @@ body {
 
 #buttons {
     display: inline-block;
-    height: 185px;
+    height: 141px;
     width: 100%;
     text-align: center;
     vertical-align: center;
@@ -52,11 +52,14 @@ body {
 .button {
     width: 20%;
     height: 100%;
-    margin: 0;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     padding: 0;
-    background-color: #000000;
+    background-color: #202020;
     color: rgba(255, 255, 255, 0.87);
-    border: 50px solid rgb(0, 0, 0);
+    border: 50px solid rgb(32, 32, 32);
     cursor: pointer;
     transition: all 0.3s;
 

@@ -29,6 +29,8 @@ const model = {
     enemyAttack: null,
     enemyDamageSpread: null,
     enemyPRNG: {},
+    enemyHpScalar: null,
+    enemyAttackScalar: null,
 
     currentRound: null,
 
@@ -63,12 +65,15 @@ const model = {
             this.mcDodgeTimer = 0;
             this.mcDodgeRoll = 2;
             this.enemyDamageSpread = 0.6;
-            this.currentRound = 1;
+            this.enemyHpScalar = 1.05; //5%
+            this.enemyAttackScalar = 1.1; //10%
             this.shouldRunStateZeroOnReady = true;
-
+            
+            this.currentRound = 0;
             this.setNewSeed(); // seed -1
             this.getEnemy(); // current enemy is always from the previous seed
 
+            this.currentRound = 1;
             this.setNewSeed(); // start seed (0)
             this.setNewPRNGs();
 
@@ -98,6 +103,8 @@ const model = {
         this.enemyAttack = null;
         this.enemyDamageSpread = null;
         this.enemyPRNG = {};
+        this.enemyHpScalar = null;
+        this.enemyAttackScalar = null;
 
         this.currentRound = null;
 
@@ -168,9 +175,9 @@ const model = {
         this.enemyAlive = true;
         this.enemyName = this.currentEnemy.name;
         this.enemyKey = this.currentEnemy.key;
-        this.enemyMaxHp = this.currentEnemy.health;
+        this.enemyMaxHp = Math.floor(this.currentEnemy.health * (this.enemyHpScalar ** this.currentRound));
         this.enemyHp = this.enemyMaxHp;
-        this.enemyAttack = this.currentEnemy.attack;
+        this.enemyAttack = Math.floor(this.currentEnemy.attack * (this.enemyAttackScalar ** this.currentRound));
         this.enemyDamage = this.enemyAttack;
     },
 
@@ -184,6 +191,7 @@ const model = {
     },
 
     getRewards() {
+        const random = seedrandom(this.seed + 3);
         this.currentRewards = this.sample(basicRewards, 3);
     },
 

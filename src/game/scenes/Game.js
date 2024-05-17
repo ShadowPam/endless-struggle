@@ -109,7 +109,7 @@ export class Game extends Scene {
             .setOrigin(0.5);
 
         this.mcDamageIndicatorImage = this.add.image(565, 565, "AttackIcon");
-        this.mcDamageIndicatorImage.scale = 1.2;
+        this.mcDamageIndicatorImage.scale = 1;
         this.mcDamageIndicatorText = this.add
             .text(548, 565, this.game.config.initData.mcDamage, {
                 fontFamily: "Marcellus",
@@ -122,7 +122,7 @@ export class Game extends Scene {
             .setOrigin(1, 0.5);
 
         this.mcShieldIndicatorImage = this.add.image(565, 610, "ShieldIcon");
-        this.mcShieldIndicatorImage.scale = 1.2;
+        this.mcShieldIndicatorImage.scale = 1;
         this.mcShieldIndicatorText = this.add
             .text(548, 610, this.game.config.initData.mcShield, {
                 fontFamily: "Marcellus",
@@ -135,7 +135,7 @@ export class Game extends Scene {
             .setOrigin(1, 0.5);
 
         this.mcDodgeIndicatorImage = this.add.image(565, 655, "DodgeIcon");
-        this.mcDodgeIndicatorImage.scale = 1.2;
+        this.mcDodgeIndicatorImage.scale = 1;
         this.mcDodgeIndicatorText = this.add
             .text(548, 655, this.game.config.initData.mcDodgeTimer, {
                 fontFamily: "Marcellus",
@@ -212,7 +212,7 @@ export class Game extends Scene {
             .setOrigin(0.5);
 
         this.enemyDamageIndicatorImage = this.add.image(1325, 565, "AttackIcon");
-        this.enemyDamageIndicatorImage.scale = 1.2;
+        this.enemyDamageIndicatorImage.scale = 1;
         this.enemyDamageIndicatorImage.flipX = true;
         this.enemyDamageIndicatorText = this.add
             .text(1342, 565, this.game.config.initData.enemyDamage, {
@@ -465,13 +465,13 @@ export class Game extends Scene {
         this.mcDodgeIndicatorText.setText(props.mcDodgeTimer);
 
         if (props.mcConfidence) {
-            this.mcDamageIndicatorImage.scale = 1.5;
-            this.mcDamageIndicatorText.scale = 1.18;
+            this.mcDamageIndicatorImage.scale = 2;
+            this.mcDamageIndicatorText.setFontSize(30);
             this.mcDamageIndicatorText.setColor("#ffff9a");
             this.mcDamageIndicatorImage.setTint(0xffffff, 0xffff00, 0xffffff, 0xffffff);
         } else {
-            this.mcDamageIndicatorImage.scale = 1.2;
-            this.mcDamageIndicatorText.scale = 1;
+            this.mcDamageIndicatorImage.scale = 1;
+            this.mcDamageIndicatorText.setFontSize(25);
             this.mcDamageIndicatorText.setColor("#ffffff");
             this.mcDamageIndicatorImage.setTint(0xffffff, 0xffffff, 0xffffff, 0xffffff);
         }
