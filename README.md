@@ -2,17 +2,19 @@
 
 An endless web-based roguelike where the player is a hunter battling monsters one by one in a turn based environment. After each successful battle the player will get to pick between 3 options for stat upgrades, items or relics that modify the following battles. The player will be scored and receive a high score depending on how many monsters they killed. The difficulty will increase as the number of battles go up. Every monster will on their turn present a joke upon battle start that will reduce the player’s hitpoints. During battle the monster's current damage and health will be adjusted by the struggle meter as well as the amount of previous battles finished. The struggle meter will make the jokes do more damage and create a blur effect on the screen to give the player feedback on how much struggle they are in. During battle the struggle meter goes up by how many turns it takes the player to successfully slay the monster. After a successful battle the struggle meter will go down by a set amount(able to be increased through upgrades).
 
-### So far
 
-So far we have started implementing the main gameplayloop and getting some animations rolling, the attack working and monster dying.
-Furthermore the monster deals damage to us on their turn through the use of the Joke API.
-We have also set up the skeleton and figured out how Phaser works more in depth.
-
-## Still plan to do
+## In-Depth
 
 You can take a look at our [Project Design Document](https://docs.google.com/document/d/1kvHIkOhtxyfwX9pLrCysm74v3xT7PtJOYbR38JCDaEo/edit?usp=sharing) for specifics.
 
-However currently we need to finish up the gameplay loop. Implement persistance, login, leaderboard and settings.
+## Set-up (locally)
+
+Download then run `npm install` for fetching relevant dependencies.
+Run `npm run dev` to start it up in localhost:8080.
+
+## 3rd party component
+
+The Leaderboard is a 3rd party component that is user-visible. It takes in a datalist that we store in the database and produces a leaderboard component with search and sort features. You can find this code in LeaderboardPresenter and LeaderboardView as well as GameOverPresenter(saving to db).
 
 ## Structure
 
