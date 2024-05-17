@@ -6,8 +6,8 @@ export function MainMenuView(props) {
     function GoToGame() {
         window.location.hash = "#/game";
     }
-    function GoToSettings() {
-        window.location.hash = "#/settings";
+    function GoToHowTo() {
+        window.location.hash = "#/how-to";
     }
     function GoToLeaderboard() {
         window.location.hash = "#/leaderboard";
@@ -39,8 +39,8 @@ export function MainMenuView(props) {
                         CONTINUE
                     </button>
                 )}
-                <button className="menubutton" onClick={GoToSettings}>
-                    SETTINGS
+                <button className="menubutton" onClick={GoToHowTo}>
+                    HOW TO PLAY
                 </button>
                 <button className="menubutton" onClick={GoToLeaderboard}>
                     LEADERBOARD
