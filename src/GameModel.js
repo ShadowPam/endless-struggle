@@ -51,7 +51,8 @@ const model = {
     initializeModel() {
         if (!this.initialized) {
             if (this.ready) {
-                this.mcName = auth.currentUser.email;
+                let char = auth.currentUser.email.indexOf('@');
+                this.mcName = auth.currentUser.email.slice(0,char);
             }
             this.mcAlive = true;
             this.mcMaxHp = 50;

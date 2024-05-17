@@ -6,7 +6,6 @@ const GameOver = observer(function GameOverRender(props) {
 
     function saveScoreToLeaderboardACB(){
         props.globalModel.leaderboard = [...props.globalModel.leaderboard, {name: props.model.mcName, score: props.model.currentRound}];
-        console.log("hello", toJS(props.globalModel.leaderboard));
         props.model.resetModel();
     }
 

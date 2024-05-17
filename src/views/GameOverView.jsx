@@ -16,24 +16,26 @@ export function GameOverView(props) {
     }
 
     return (
-        <>
-        <h1>GAME OVER (you died)</h1>
-        <h3>Good job you made it to round: {props.model.currentRound}</h3>
+        <div className="gameOver">
+            <h1>GAME OVER (you died)</h1>
+            <h3>Good job you made it to round: {props.model.currentRound}</h3>
 
-        {/*perhaps show a summary here of users collected item/number of monster slain(would have to add this to model) */}
+            {/*perhaps show a summary here of users collected item/number of monster slain(would have to add this to model) */}
 
-        {
-            props.model.user ? 
-            <>
-            <label htmlFor="leaderboard">
-                Want to save your current round score to leaderboard?
-            </label>
-            <button onClick={saveToLeaderboardACB} name="leaderboard">Save To Leaderboard</button>
-            </>
-            :
-            ""
-        }
+            {props.model.user ? (
+                <>
+                    <label htmlFor="leaderboard">
+                        Want to save your current round score to leaderboard?
+                    </label><br/>
+                    <button onClick={saveToLeaderboardACB} name="leaderboard">
+                        Save To Leaderboard
+                    </button><br/><br />
+                </>
+            ) : (
+                ""
+            )}
+
             <button onClick={GoToMenu}>Back To Menu</button>
-        </>
+        </div>
     );
 }
