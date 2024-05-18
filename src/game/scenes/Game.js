@@ -418,7 +418,7 @@ export class Game extends Scene {
                 run: () => {
                     this.enemyJoke.setVisible(false);
                     this.enemyJoke.x = 990;
-                    this.enemyJoke.y = 500;
+                    this.enemyJoke.y = 450;
                     if (props.mcAlive) {
                         props.setCombatState(0);
                     } else {
