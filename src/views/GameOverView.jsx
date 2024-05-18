@@ -2,6 +2,7 @@ export function GameOverView(props) {
     function GoToMenu() {
         //reset model on back to main menu
         window.location.hash = "#/menu";
+        props.model.resetModel();
     }
 
     function saveToLeaderboardACB() {
