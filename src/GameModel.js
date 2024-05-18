@@ -204,19 +204,19 @@ const model = {
     },
 
     getRewards() {
-        const random = seedrandom(this.seed + 3);
+        const random = seedrandom(this.seed);
         const number = random()
-        if (number >= 0.3) {
+        if (number >= 0.25) {
             this.currentRewards = this.sample(basicRewards, 3);
         }
-        if (number < 0.3) {
+        if (number < 0.25) {
             this.currentRewards = this.sample(rareRewards, 3);
         }
     },
 
     sample(arr, nr) {
         const array = [...arr];
-        const random = seedrandom(this.seed + 2);
+        const random = seedrandom(this.seed*20);
         var j, x, index;
         for (index = array.length - 1; index > 0; index--) {
             j = Math.floor(random() * (index + 1));
