@@ -170,7 +170,6 @@ const model = {
             this.mcDodgeRoll = this.mcPRNG();
         } else {
             this.mcDodgeRoll = 2; // 2 -> guaranteed hit
-            console.log("awdjwa");
         }
     },
 
@@ -187,8 +186,6 @@ const model = {
         this.enemyMaxHp = Math.floor(this.currentEnemy.health * (this.enemyHpScalar ** this.currentRound));
         this.enemyHp = this.enemyMaxHp;
         this.enemyAttack = Math.floor(this.currentEnemy.attack * (this.enemyAttackScalar ** this.currentRound));
-        console.log(this.enemyAttackScalar)
-        console.log(this.enemyHpScalar)
         this.enemyDamage = this.enemyAttack;
     },
 
@@ -208,10 +205,11 @@ const model = {
 
     getRewards() {
         const random = seedrandom(this.seed + 3);
-        if (random() >= 0.3) {
+        const number = random()
+        if (number >= 0.3) {
             this.currentRewards = this.sample(basicRewards, 3);
         }
-        if (random() < 0.3) {
+        if (number < 0.3) {
             this.currentRewards = this.sample(rareRewards, 3);
         }
     },
@@ -226,7 +224,6 @@ const model = {
             array[index] = array[j];
             array[j] = x;
         }
-        console.log(this.seed,array)
         return array.slice(0, nr);
     },
 
