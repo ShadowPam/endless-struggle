@@ -54,32 +54,32 @@ const Game = observer(function GameRender(props) {
 
     function mouseOnLeftACB() {
         const scene = phaserRef.current.scene;
-        scene.basicRewards[0].list[0].alpha = 1;
+        scene.rewards[0].list[0].alpha = 1;
     }
 
     function mouseOffLeftACB() {
         const scene = phaserRef.current.scene;
-        scene.basicRewards[0].list[0].alpha = 0.4;
+        scene.rewards[0].list[0].alpha = 0.4;
     }
 
     function mouseOnMiddleACB() {
         const scene = phaserRef.current.scene;
-        scene.basicRewards[1].list[0].alpha = 1;
+        scene.rewards[1].list[0].alpha = 1;
     }
 
     function mouseOffMiddleACB() {
         const scene = phaserRef.current.scene;
-        scene.basicRewards[1].list[0].alpha = 0.4;
+        scene.rewards[1].list[0].alpha = 0.4;
     }
 
     function mouseOnRightACB() {
         const scene = phaserRef.current.scene;
-        scene.basicRewards[2].list[0].alpha = 1;
+        scene.rewards[2].list[0].alpha = 1;
     }
 
     function mouseOffRightACB() {
         const scene = phaserRef.current.scene;
-        scene.basicRewards[2].list[0].alpha = 0.4;
+        scene.rewards[2].list[0].alpha = 0.4;
     }
 
     // progress combat state when joke is aquired

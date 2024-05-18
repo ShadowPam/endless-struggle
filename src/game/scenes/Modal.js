@@ -14,6 +14,8 @@ export class Modal extends Scene {
         this.bg.setAlpha(1);
 
         this.basicRewards = [{}, {}, {}];
+        this.rareRewards = [{}, {}, {}];
+        
         function createRewardsCB(object, index) {
             let xPos;
             if (index === 0) {
@@ -23,20 +25,20 @@ export class Modal extends Scene {
             } else if (index === 2) {
                 xPos = 1530;
             }
-            const bg = this.add.rectangle(xPos, 360, 330, 420, 0xffffff);
+            const bg = this.add.rectangle(xPos, 360, 330, 420, this.colors.background);
             bg.alpha = 0.4;
             const outerBorder = this.add
                 .rectangle(xPos, 360, 330, 420)
-                .setStrokeStyle(15, 0x4d2f00);
-            const innerBorder = this.add.rectangle(xPos, 360, 320, 410).setStrokeStyle(8, 0x301d00);
+                .setStrokeStyle(15, this.colors.outerBorder);
+            const innerBorder = this.add.rectangle(xPos, 360, 320, 410).setStrokeStyle(8, this.colors.innerBorder);
             const image = this.add.image(xPos, 300, "");
             image.scale = 1;
             const text = this.add
                 .text(xPos, 480, "", {
                     fontFamily: "Marcellus",
                     fontSize: 50,
-                    color: "#000000",
-                    stroke: "#828282",
+                    color: this.colors.innerTextColor,
+                    stroke: this.colors.outerTextColor,
                     strokeThickness: 2,
                     align: "center",
                 })
@@ -45,7 +47,24 @@ export class Modal extends Scene {
                 .container(0, 0, [bg, outerBorder, innerBorder, image, text])
                 .setVisible(false);
         }
+        // basic colors
+        this.colors = {
+            background: 0xffffff,
+            outerBorder: 0x4d2f00,
+            innerBorder: 0x301d00,
+            innerTextColor: "#000000",
+            outerTextColor: "#828282"
+        }
         this.basicRewards = this.basicRewards.map(createRewardsCB, this);
+        // rare colors
+        this.colors = {
+            background: 0xffda73,
+            outerBorder: 0x4d4d4d,
+            innerBorder: 0x292929,
+            innerTextColor: "#000000",
+            outerTextColor: "#828282"
+        }
+        this.rareRewards = this.rareRewards.map(createRewardsCB, this);
 
         this.cam = this.cameras.main;
         this.targetScene = this.scene.get("Game"); // sleeping
@@ -58,22 +77,32 @@ export class Modal extends Scene {
         // EVENTS
     }
 
-    updateBasicRewardsCB(rewards, index) {
-        this.basicRewards[index].list[3].setTexture(rewards.image);
-        this.basicRewards[index].list[4].setText(rewards.statText);
-        // reset hoover effect
-        this.basicRewards[index].list[0].alpha = 0.4;
+    updateRewardsCB(rewards, index) {
+            this.rewards[index].list[3].setTexture(rewards.image);
+            this.rewards[index].list[4].setText(rewards.statText);
+            // reset hoover effect
+            this.rewards[index].list[0].alpha = 0.4;
     }
 
     showRewards(props, bool) {
-        props.map(this.updateBasicRewardsCB, this);
-        this.basicRewards[0].setVisible(bool);
-        this.basicRewards[1].setVisible(bool);
-        this.basicRewards[2].setVisible(bool);
+        this.keepRewardsUpdated(props)
+        props.map(this.updateRewardsCB, this);
+            this.rewards[0].setVisible(bool);
+            this.rewards[1].setVisible(bool);
+            this.rewards[2].setVisible(bool);
     }
 
     changeScene(props) {
         EventBus.emit("current-scene-ready", this.targetScene);
+    }
+
+    keepRewardsUpdated(props){
+        if(props[0].tier == "basic"){
+            this.rewards = this.basicRewards
+        }
+        if(props[0].tier == "rare"){
+            this.rewards = this.rareRewards
+        }
     }
 
     changeToCombatScreen(props) {

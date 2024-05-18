@@ -2,6 +2,7 @@ import { joke } from "./jokeSource";
 import { resolvePromise } from "./resolvePromise";
 import enemies from "./Enemies.js";
 import basicRewards from "./BasicRewards.js";
+import rareRewards from "./RareRewards.js";
 import seedrandom from "seedrandom";
 import { auth } from "./firebaseModel.js";
 
@@ -17,6 +18,7 @@ const model = {
     mcConfidence: null,
     mcDodge: null,
     mcDodgeTimer: null,
+    maxDodgeTimer: null,
     mcDodgeRoll: null,
     mcPRNG: {},
 
@@ -64,6 +66,7 @@ const model = {
             this.mcDefence = 2;
             this.mcDodge = 0.15;
             this.mcDodgeTimer = 0;
+            this.maxDodgeTimer = 2;
             this.mcDodgeRoll = 2;
             this.enemyDamageSpread = 0.6;
             this.enemyHpScalar = 1.05; //5%
@@ -93,6 +96,7 @@ const model = {
         this.mcDefence = null;
         this.mcDodge = null;
         this.mcDodgeTimer = null;
+        this.maxDodgeTimer = null;
         this.mcDodgeRoll = null;
         this.mcPRNG = {};
 
@@ -195,11 +199,21 @@ const model = {
             this.mcDefence += currentReward.defence;
             this.mcDodge += currentReward.dodge;
         }
+        if (currentReward.tier == "rare") {
+            this.mcShield *= currentReward.shieldMultiplier;
+            this.mcAttack += currentReward.attack;
+            this.maxDodgeTimer += currentReward.dodgeTimer;
+        }
     },
 
     getRewards() {
         const random = seedrandom(this.seed + 3);
-        this.currentRewards = this.sample(basicRewards, 3);
+        if (random() >= 0.3) {
+            this.currentRewards = this.sample(basicRewards, 3);
+        }
+        if (random() < 0.3) {
+            this.currentRewards = this.sample(rareRewards, 3);
+        }
     },
 
     sample(arr, nr) {
@@ -241,7 +255,7 @@ const model = {
     },
 
     doDodge() {
-        this.mcDodgeTimer = 2;
+        this.mcDodgeTimer = this.maxDodgeTimer;
         this.mcDodgeRoll = this.mcPRNG();
     },
 
