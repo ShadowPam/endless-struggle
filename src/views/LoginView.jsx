@@ -10,7 +10,6 @@ export function LoginView(props) {
 
     function loginOrSignUpACB(e) {
         e.preventDefault();
-        console.log("here");
         if (buttonIndex === 0) {
             loginACB();
         } else {
@@ -19,7 +18,6 @@ export function LoginView(props) {
     }
 
     function loginACB(e) {
-        console.log("login");
         props.login(
             document.getElementById("email").value,
             document.getElementById("password").value
@@ -27,7 +25,6 @@ export function LoginView(props) {
     }
 
     function signUpACB(e) {
-        console.log("signup");
         props.signup(
             document.getElementById("email").value,
             document.getElementById("password").value

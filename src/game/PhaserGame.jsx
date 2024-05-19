@@ -9,7 +9,6 @@ export const PhaserGame = forwardRef(function PhaserGame(props, ref) {
     // Create the game inside a useLayoutEffect hook to avoid the game being created outside the DOM
     useLayoutEffect(() => {
         if (game.current === undefined) {
-            console.log(props.initData)
             game.current = StartGame("game-container");
 
             // data used to create scene on startup/reload
@@ -26,13 +25,6 @@ export const PhaserGame = forwardRef(function PhaserGame(props, ref) {
             }
         };
     }, [ref]);
-
-    // window.addEventListener('beforeunload', () => {
-    //     console.log("here")
-    //     game.destroy()
-    //     game.current = StartGame("game-container");
-    //     game.current.config.initData = props.initData;
-    // });
 
     useEffect(() => {
         EventBus.on("current-scene-ready", (currentScene) => {

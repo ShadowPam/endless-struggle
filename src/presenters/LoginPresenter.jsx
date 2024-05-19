@@ -26,9 +26,6 @@ const Login = observer(function LoginRender(props) {
                 const errorCode = error.code;
                 const errorMessage = error.message;
 
-                console.log(errorCode);
-                console.log(errorMessage);
-
                 alert("Email/password is wrong.")
               });
         });
@@ -45,8 +42,6 @@ const Login = observer(function LoginRender(props) {
                 const errorCode = error.code;
                 const errorMessage = error.message;
 
-                console.log(errorCode);
-                console.log(errorMessage);
 
                 if (errorCode == "auth/email-already-in-use"){
                     alert("Email already in use!")

@@ -2,9 +2,9 @@ const rareRewards = [
     {
         tier: "rare",
         image: "ShieldIconScaled",
-        statText: "2x DEF",
+        statText: "1,5x DEF",
         attack: 0,
-        defenceMultiplier: 2,
+        defenceMultiplier: 1.5,
         dodgeTimer: 0,
     },
     {

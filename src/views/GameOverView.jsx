@@ -13,7 +13,7 @@ export function GameOverView(props) {
         //If user logged in save score to leaderboard with name
         //Reset model after saving
         props.saveScore();
-        GoToMenu();
+        window.location.hash = "#/menu";
     }
 
     return (

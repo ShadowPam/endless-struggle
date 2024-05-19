@@ -92,7 +92,6 @@ const Game = observer(function GameRender(props) {
     useEffect(() => {
         const scene = phaserRef.current.scene;
         if (scene != null) {
-            console.log(props.model.combatState);
 
             // 0 - you can declare your action intent
             if (props.model.combatState == 0) {
