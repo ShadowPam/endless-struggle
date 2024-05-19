@@ -18,7 +18,7 @@ const model = {
     mcConfidence: null,
     mcDodge: null,
     mcDodgeTimer: null,
-    maxDodgeTimer: null,
+    mcMaxDodgeTimer: null,
     mcDodgeRoll: null,
     mcPRNG: {},
 
@@ -53,8 +53,8 @@ const model = {
     initializeModel() {
         if (!this.initialized) {
             if (this.ready) {
-                let char = auth.currentUser.email.indexOf('@');
-                this.mcName = auth.currentUser.email.slice(0,char);
+                let char = auth.currentUser.email.indexOf("@");
+                this.mcName = auth.currentUser.email.slice(0, char);
             }
             this.mcAlive = true;
             this.mcMaxHp = 50;
@@ -66,13 +66,13 @@ const model = {
             this.mcDefence = 2;
             this.mcDodge = 0.15;
             this.mcDodgeTimer = 0;
-            this.maxDodgeTimer = 2;
+            this.mcMaxDodgeTimer = 2;
             this.mcDodgeRoll = 2;
             this.enemyDamageSpread = 0.6;
             this.enemyHpScalar = 1.05; //5%
             this.enemyAttackScalar = 1.1; //10%
             this.shouldRunStateZeroOnReady = true;
-            
+
             this.currentRound = 0;
             this.setNewSeed(); // seed -1
             this.getEnemy(); // current enemy is always from the previous seed
@@ -96,7 +96,7 @@ const model = {
         this.mcDefence = null;
         this.mcDodge = null;
         this.mcDodgeTimer = null;
-        this.maxDodgeTimer = null;
+        this.mcMaxDodgeTimer = null;
         this.mcDodgeRoll = null;
         this.mcPRNG = {};
 
@@ -159,8 +159,9 @@ const model = {
     },
 
     progressDodgeTimer() {
-        if (this.mcDodge > 0.95){ // enforce dodge cap
-            this.mcDodge = 0.95
+        if (this.mcDodge > 0.95) {
+            // enforce dodge cap
+            this.mcDodge = 0.95;
         }
         if (this.mcDodgeTimer > 0) {
             this.mcDodgeTimer -= 1;
@@ -183,9 +184,13 @@ const model = {
         this.enemyAlive = true;
         this.enemyName = this.currentEnemy.name;
         this.enemyKey = this.currentEnemy.key;
-        this.enemyMaxHp = Math.floor(this.currentEnemy.health * (this.enemyHpScalar ** this.currentRound));
+        this.enemyMaxHp = Math.floor(
+            this.currentEnemy.health * this.enemyHpScalar ** this.currentRound
+        );
         this.enemyHp = this.enemyMaxHp;
-        this.enemyAttack = Math.floor(this.currentEnemy.attack * (this.enemyAttackScalar ** this.currentRound));
+        this.enemyAttack = Math.floor(
+            this.currentEnemy.attack * this.enemyAttackScalar ** this.currentRound
+        );
         this.enemyDamage = this.enemyAttack;
     },
 
@@ -199,13 +204,13 @@ const model = {
         if (currentReward.tier == "rare") {
             this.mcShield *= currentReward.shieldMultiplier;
             this.mcAttack += currentReward.attack;
-            this.maxDodgeTimer += currentReward.dodgeTimer;
+            this.mcMaxDodgeTimer += currentReward.dodgeTimer;
         }
     },
 
     getRewards() {
         const random = seedrandom(this.seed);
-        const number = random()
+        const number = random();
         if (number >= 0.25) {
             this.currentRewards = this.sample(basicRewards, 3);
         }
@@ -216,7 +221,7 @@ const model = {
 
     sample(arr, nr) {
         const array = [...arr];
-        const random = seedrandom(this.seed*20);
+        const random = seedrandom(this.seed * 20);
         var j, x, index;
         for (index = array.length - 1; index > 0; index--) {
             j = Math.floor(random() * (index + 1));
@@ -252,7 +257,7 @@ const model = {
     },
 
     doDodge() {
-        this.mcDodgeTimer = this.maxDodgeTimer;
+        this.mcDodgeTimer = this.mcMaxDodgeTimer;
         this.mcDodgeRoll = this.mcPRNG();
     },
 
@@ -285,7 +290,7 @@ const model = {
         this.stateSnapshot.mcConfidence = this.mcConfidence;
         this.stateSnapshot.mcDodge = this.mcDodge;
         this.stateSnapshot.mcDodgeTimer = this.mcDodgeTimer;
-        this.stateSnapshot.maxDodgeTimer = this.maxDodgeTimer;
+        this.stateSnapshot.maxDodgeTimer = this.mcMaxDodgeTimer;
         this.stateSnapshot.mcDodgeRoll = this.mcDodgeRoll;
         this.stateSnapshot.enemyAlive = this.enemyAlive;
         this.stateSnapshot.enemyName = this.enemyName;
@@ -294,6 +299,8 @@ const model = {
         this.stateSnapshot.enemyHp = this.enemyHp;
         this.stateSnapshot.enemyAttack = this.enemyAttack;
         this.stateSnapshot.enemyDamage = this.enemyDamage;
+        this.stateSnapshot.enemyAttackScalar = this.enemyAttackScalar;
+        this.stateSnapshot.enemyHpScalar = this.enemyHpScalar;
 
         // this.stateSnapshot.mcPRNG = this.mcPRNG.state()
         // this.stateSnapshot.enemyPRNG = this.enemyPRNG.state()
@@ -310,7 +317,7 @@ const model = {
         this.mcConfidence = this.stateSnapshot.mcConfidence;
         this.mcDodge = this.stateSnapshot.mcDodge;
         this.mcDodgeTimer = this.stateSnapshot.mcDodgeTimer;
-        this.maxDodgeTimer = this.stateSnapshot.maxDodgeTimer;
+        this.mcMaxDodgeTimer = this.stateSnapshot.maxDodgeTimer;
         this.mcDodgeRoll = this.stateSnapshot.mcDodgeRoll;
         this.enemyAlive = this.stateSnapshot.enemyAlive;
         this.enemyName = this.stateSnapshot.enemyName;
@@ -319,6 +326,8 @@ const model = {
         this.enemyHp = this.stateSnapshot.enemyHp;
         this.enemyAttack = this.stateSnapshot.enemyAttack;
         this.enemyDamage = this.stateSnapshot.enemyDamage;
+        this.enemyAttackScalar = this.stateSnapshot.enemyAttackScalar;
+        this.enemyHpScalar = this.stateSnapshot.enemyHpScalar;
         this.mcPRNG = seedrandom(this.seed, { "": this.stateSnapshot.mcPRNG });
         this.enemyPRNG = seedrandom(this.seed, { "": this.stateSnapshot.enemyPRNG });
     },

@@ -27,6 +27,7 @@ function modelToPersistence(model) {
             player_shield: model.mcShield,
             player_inConfidence: model.mcConfidence,
             player_dodgeTimer: model.mcDodgeTimer,
+            player_maxDodgeTimer: model.mcMaxDodgeTimer,
         },
         enemy: {
             enemy_alive: model.enemyAlive,
@@ -39,6 +40,8 @@ function modelToPersistence(model) {
                 attack: model.enemyAttack,
                 damage_spread: model.enemyDamageSpread,
             },
+            enemy_hpScaling: model.enemyHpScalar,
+            enemy_attackScaling: model.enemyAttackScalar,
         },
         run: {
             currentRound: model.currentRound,
@@ -88,6 +91,7 @@ function toModelPlayer(player_data, model) {
     } else {
         model.mcDodgeTimer = null;
     }
+    model.mcMaxDodgeTimer = player_data?.player_maxDodgeTimer || null;
 }
 
 function toModelEnemy(enemy_data, model) {
@@ -99,6 +103,8 @@ function toModelEnemy(enemy_data, model) {
     model.enemyDamage = enemy_data?.enemy_damage || null;
     model.enemyAttack = enemy_data?.enemy_stats?.attack || null;
     model.enemyDamageSpread = enemy_data?.enemy_stats?.damage_spread || null;
+    model.enemyHpScalar = enemy_data?.enemy_hpScaling || null;
+    model.enemyAttackScalar = enemy_data?.enemy_attackScaling || null;
 }
 
 function toModelRun(run_data, model) {
@@ -201,6 +207,9 @@ function connectToFirebase(model, watchFunction, globalModel) {
             model.stateSnapshot.enemyDamage,
             model.stateSnapshot.mcPRNG,
             model.stateSnapshot.enemyPRNG,
+            model.stateSnapshot.maxDodgeTimer,
+            model.stateSnapshot.enemyAttackScalar,
+            model.stateSnapshot.enemyHpScalar,
             globalModel.leaderboard,
         ];
     }
@@ -216,11 +225,12 @@ function connectToFirebase(model, watchFunction, globalModel) {
             model.user = null;
         }
         model.ready = false;
-        globalModel.ready = false;
-        readFromFirebase(model);
-        readFromFirebaseGlobal(globalModel);
+        
+        readFromFirebase(model); 
     }
 
+    globalModel.ready = false;
+    readFromFirebaseGlobal(globalModel);
     onAuthStateChanged(auth, loginOrOutACB);
     watchFunction(checkModelACB, saveModelACB);
 }
