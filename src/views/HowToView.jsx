@@ -5,7 +5,7 @@ export function HowToView(props) {
 
     return (
         <>
-            <button className="pausebutton" onClick={GoToMenu}>
+            <button className="menulogin" onClick={GoToMenu}>
                 Back to Menu
             </button>
             <div className="howToPlay">
