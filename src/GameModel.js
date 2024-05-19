@@ -202,7 +202,7 @@ const model = {
             this.mcDodge += currentReward.dodge;
         }
         if (currentReward.tier == "rare") {
-            this.mcShield *= currentReward.shieldMultiplier;
+            this.mcDefence = Math.round(this.mcDefence*currentReward.defenceMultiplier);
             this.mcAttack += currentReward.attack;
             this.mcMaxDodgeTimer += currentReward.dodgeTimer;
         }
