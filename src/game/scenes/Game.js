@@ -19,7 +19,7 @@ export class Game extends Scene {
         this.stats = this.add
             .text(
                 135,
-                5,
+                10,
                 this.game.config.initData.mcAttack +
                     "\n" +
                     this.game.config.initData.mcDefence +
@@ -38,7 +38,7 @@ export class Game extends Scene {
             .setOrigin(0, 0);
 
         this.statsText = this.add
-            .text(5, 5, "Attack:  " + "\n" + "Defence: " + "\n" + "Dodge Chance: ", {
+            .text(5, 10, "Attack:  " + "\n" + "Defence: " + "\n" + "Dodge Chance: ", {
                 fontFamily: "Marcellus",
                 fontSize: 18,
                 color: "#ffffff",
