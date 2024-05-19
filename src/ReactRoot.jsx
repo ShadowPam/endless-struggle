@@ -62,11 +62,16 @@ function makeRouter(props) {
 }
 
 const ReactRoot = observer(function ReactRoot(props) {
+  if(props.model.ready && props.globalModel.ready){
     return (
         <React.StrictMode>
             <RouterProvider router={makeRouter(props)} />
         </React.StrictMode>
     );
+  }
+  else{
+    return <img src="/assets/LoadingGif.gif" alt="loadingImage"></img>;
+  }
 });
 
 export { ReactRoot };

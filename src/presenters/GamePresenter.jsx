@@ -4,7 +4,6 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useRef } from "react";
 import { PhaserGame } from "../game/PhaserGame";
 import { EventBus } from "../game/EventBus";
-
 const Game = observer(function GameRender(props) {
     const phaserRef = useRef();
 
