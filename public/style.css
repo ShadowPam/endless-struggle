@@ -131,7 +131,7 @@ body {
 
 .menulogo {
     position: absolute;
-    top: 5%;
+    top: 8%;
     left: 5%;
     transform: translate(-50%, -50%);
 }
@@ -227,4 +227,11 @@ div.howToPlay span {
     text-align: center;
     font-family: "Helvetica";
     padding: 5px;
+}
+
+.loadingSpinner {
+    display: block;
+    width: 5%;
+    margin:auto;
+    margin-top: 20%;
 }

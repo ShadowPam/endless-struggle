@@ -36,7 +36,7 @@ export function LoginView(props) {
 
     return (
         <div>
-            <button className="pausebutton" onClick={GoToMenu}>
+            <button className="menulogin" onClick={GoToMenu}>
                 Back to Menu
             </button>
             {!props.user ? (

@@ -18,7 +18,7 @@ export function MainMenuView(props) {
 
     return (
         <div>
-            <b className="menulogo">LOGO</b>
+            <b className="menulogo"><img src="../../gameicon_upscaled.png" border="0" width="100" height="100" /></b>
             {!props.user ? (
                 <button className="menulogin" onClick={GoToLogin}>
                     LOGIN
