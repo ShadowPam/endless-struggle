@@ -77,7 +77,7 @@ const ReactRoot = observer(function ReactRoot(props) {
             </React.StrictMode>
         );
     } else {
-        return <img src="/assets/LoadingGif.gif" alt="loadingImage"></img>;
+        return <img className="loadingSpinner" src="/assets/LoadingGif.gif" alt="loadingImage"></img>;
     }
 });
 

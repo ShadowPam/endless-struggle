@@ -228,3 +228,10 @@ div.howToPlay span {
     font-family: "Helvetica";
     padding: 5px;
 }
+
+.loadingSpinner {
+    display: block;
+    width: 5%;
+    margin:auto;
+    margin-top: 20%;
+}
