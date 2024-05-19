@@ -1,4 +1,9 @@
 export function ModalView(props) {
+    function GoToMenu() {
+        props.onMenu();
+        window.location.hash = "#/menu";
+    }
+    
     function chooseLeftACB(event) {
         props.onLeft();
     }
@@ -36,7 +41,11 @@ export function ModalView(props) {
     }
 
     return (
-        <div id="buttons">
+        <div>
+            <button className="pausebutton" onClick={GoToMenu}>
+                Pause
+            </button>
+            <div id="buttons">
             <button
                 onClick={chooseLeftACB}
                 onMouseEnter={enterLeftACB}
@@ -62,5 +71,7 @@ export function ModalView(props) {
                 RIGHT
             </button>
         </div>
+        </div>
+        
     );
 }

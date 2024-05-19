@@ -184,6 +184,7 @@ const Game = observer(function GameRender(props) {
             <>
                 <PhaserGame ref={phaserRef} />
                 <ModalView
+                    onMenu={onMenuACB}
                     mouseOnLeft={mouseOnLeftACB}
                     mouseOffLeft={mouseOffLeftACB}
                     mouseOnMiddle={mouseOnMiddleACB}
