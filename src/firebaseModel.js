@@ -119,16 +119,25 @@ function toGlobalModel(global_data, globalModel) {
     globalModel.leaderboard = global_data?.leader_board || [{ name: "Kid", score: 3 }];
 }
 
-function saveToFirebase(model, globalModel) {
-    if (globalModel.ready) {
-        const global_model_path = PATH + "/global";
-        set(ref(db, global_model_path), globalModelToPersistance(globalModel));
+function saveToFirebase(model, globalModel, type) {
+    console.log(type)
+    if(type == "global"){
+        console.log("in global")
+        if (globalModel.ready) {
+            console.log("saved global")
+            const global_model_path = PATH + "/global";
+            set(ref(db, global_model_path), globalModelToPersistance(globalModel));
+        }
+    }  
+    if(type == "local"){
+        console.log("in local")
+        if (model.ready && model.user) {
+            console.log("saved local")
+            const model_path = PATH + "/" + model.user.uid;
+            set(ref(db, model_path), modelToPersistence(model));
+        }
     }
-
-    if (model.ready && model.user) {
-        const model_path = PATH + "/" + model.user.uid;
-        set(ref(db, model_path), modelToPersistence(model));
-    }
+    
 }
 
 function readFromFirebase(model) {
@@ -161,7 +170,7 @@ function readFromFirebaseGlobal(globalModel) {
         });
 }
 
-function connectToFirebase(model, watchFunction, globalModel) {
+function connectToFirebase(model, globalModel, watchFunction, globalWatchFunction) {
     function checkModelACB() {
         return [
             model.stateSnapshot.mcAlive,
@@ -206,13 +215,22 @@ function connectToFirebase(model, watchFunction, globalModel) {
             model.stateSnapshot.enemyPRNG,
             model.stateSnapshot.maxDodgeTimer,
             model.stateSnapshot.enemyAttackScalar,
-            model.stateSnapshot.enemyHpScalar,
-            globalModel.leaderboard,
+            model.stateSnapshot.enemyHpScalar
+        ];
+    }
+
+    function checkGlobalModelACB() {
+        return [
+            globalModel.leaderboard
         ];
     }
 
     function saveModelACB() {
-        saveToFirebase(model, globalModel);
+        saveToFirebase(model, globalModel, "local");
+    }
+
+    function saveGlobalModelACB() {
+        saveToFirebase(model, globalModel, "global");
     }
 
     function loginOrOutACB(user) {
@@ -230,6 +248,7 @@ function connectToFirebase(model, watchFunction, globalModel) {
     readFromFirebaseGlobal(globalModel);
     onAuthStateChanged(auth, loginOrOutACB);
     watchFunction(checkModelACB, saveModelACB);
+    watchFunction(checkGlobalModelACB, saveGlobalModelACB);
 }
 export {
     connectToFirebase,

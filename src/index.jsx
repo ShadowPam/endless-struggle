@@ -18,5 +18,5 @@ import { connectToFirebase } from "./firebaseModel.js";
 
 window.myModel= reactiveModel; 
 
-connectToFirebase(reactiveModel, reaction, reactiveGlobalModel);
+connectToFirebase(reactiveModel, reactiveGlobalModel, reaction);
 //connectToFireBaseGlobal(reactiveGlobalModel, reaction);
