@@ -120,19 +120,14 @@ function toGlobalModel(global_data, globalModel) {
 }
 
 function saveToFirebase(model, globalModel, type) {
-    console.log(type);
     if (type == "global") {
-        console.log("in global");
         if (globalModel.ready) {
-            console.log("saved global");
             const global_model_path = PATH + "/global";
             set(ref(db, global_model_path), globalModelToPersistance(globalModel));
         }
     }
     if (type == "local") {
-        console.log("in local");
         if (model.ready && model.user) {
-            console.log("saved local");
             const model_path = PATH + "/" + model.user.uid;
             set(ref(db, model_path), modelToPersistence(model));
         }
