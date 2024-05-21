@@ -120,24 +120,23 @@ function toGlobalModel(global_data, globalModel) {
 }
 
 function saveToFirebase(model, globalModel, type) {
-    console.log(type)
-    if(type == "global"){
-        console.log("in global")
+    console.log(type);
+    if (type == "global") {
+        console.log("in global");
         if (globalModel.ready) {
-            console.log("saved global")
+            console.log("saved global");
             const global_model_path = PATH + "/global";
             set(ref(db, global_model_path), globalModelToPersistance(globalModel));
         }
-    }  
-    if(type == "local"){
-        console.log("in local")
+    }
+    if (type == "local") {
+        console.log("in local");
         if (model.ready && model.user) {
-            console.log("saved local")
+            console.log("saved local");
             const model_path = PATH + "/" + model.user.uid;
             set(ref(db, model_path), modelToPersistence(model));
         }
     }
-    
 }
 
 function readFromFirebase(model) {
@@ -170,7 +169,7 @@ function readFromFirebaseGlobal(globalModel) {
         });
 }
 
-function connectToFirebase(model, globalModel, watchFunction, globalWatchFunction) {
+function connectToFirebase(model, globalModel, watchFunction) {
     function checkModelACB() {
         return [
             model.stateSnapshot.mcAlive,
@@ -215,14 +214,12 @@ function connectToFirebase(model, globalModel, watchFunction, globalWatchFunctio
             model.stateSnapshot.enemyPRNG,
             model.stateSnapshot.maxDodgeTimer,
             model.stateSnapshot.enemyAttackScalar,
-            model.stateSnapshot.enemyHpScalar
+            model.stateSnapshot.enemyHpScalar,
         ];
     }
 
     function checkGlobalModelACB() {
-        return [
-            globalModel.leaderboard
-        ];
+        return [globalModel.leaderboard];
     }
 
     function saveModelACB() {
@@ -239,9 +236,9 @@ function connectToFirebase(model, globalModel, watchFunction, globalWatchFunctio
         } else {
             model.user = null;
         }
-        model.ready = false;
         
-        readFromFirebase(model); 
+        model.ready = false;
+        readFromFirebase(model);
     }
 
     globalModel.ready = false;
@@ -258,5 +255,5 @@ export {
     readFromFirebase,
     readFromFirebaseGlobal,
     globalPersistanceToGlobalModel,
-    globalModelToPersistance
+    globalModelToPersistance,
 };
